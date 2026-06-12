@@ -1,52 +1,52 @@
 const todayItems = [
   {
-    time: "9:00 AM",
-    title: "Review rehearsal plan",
-    detail: "Prep notes for today’s choreography session",
-    type: "Prep",
+    time: '9:00 AM',
+    title: 'Review rehearsal plan',
+    detail: 'Prep notes for today’s choreography session',
+    type: 'Prep',
   },
   {
-    time: "12:30 PM",
-    title: "Follow up with artist team",
-    detail: "Confirm music cut, room time, and dancers",
-    type: "Follow-up",
+    time: '12:30 PM',
+    title: 'Follow up with artist team',
+    detail: 'Confirm music cut, room time, and dancers',
+    type: 'Follow-up',
   },
   {
-    time: "4:00 PM",
-    title: "Creative check-in",
-    detail: "Review concept notes and update project direction",
-    type: "Meeting",
+    time: '4:00 PM',
+    title: 'Creative check-in',
+    detail: 'Review concept notes and update project direction',
+    type: 'Meeting',
   },
 ];
 
 const weekItems = [
-  "Showcase rehearsal on Thursday",
-  "Payment follow-up due Friday",
-  "New artist concept review this weekend",
+  'Showcase rehearsal on Thursday',
+  'Payment follow-up due Friday',
+  'New artist concept review this weekend',
 ];
 
 const projects = [
   {
-    name: "Artist Choreo Package",
-    status: "Active",
-    next: "Needs music notes cleaned up",
+    name: 'Artist Choreo Package',
+    status: 'Active',
+    next: 'Needs music notes cleaned up',
   },
   {
-    name: "Live Show Prep",
-    status: "Upcoming",
-    next: "Confirm dancers and rehearsal space",
+    name: 'Live Show Prep',
+    status: 'Upcoming',
+    next: 'Confirm dancers and rehearsal space',
   },
   {
-    name: "Workshop Series",
-    status: "Waiting",
-    next: "Waiting on client approval",
+    name: 'Workshop Series',
+    status: 'Waiting',
+    next: 'Waiting on client approval',
   },
 ];
 
 const notes = [
-  "Bridge section needs stronger transition.",
-  "Try formation change after second chorus.",
-  "Ask about lighting cues before final rehearsal.",
+  'Bridge section needs stronger transition.',
+  'Try formation change after second chorus.',
+  'Ask about lighting cues before final rehearsal.',
 ];
 
 export default function Home() {
@@ -55,15 +55,13 @@ export default function Home() {
       <section className="mx-auto max-w-7xl space-y-6">
         <header className="flex flex-col justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl md:flex-row md:items-center">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-violet-300">
-              Tempo
-            </p>
+            <p className="text-sm uppercase tracking-[0.3em] text-violet-300">Tempo</p>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-6xl">
               Good morning, Ray.
             </h1>
             <p className="mt-3 max-w-2xl text-neutral-400">
-              Here’s what needs your attention today, this week, and across your
-              active creative work.
+              Here’s what needs your attention today, this week, and across your active creative
+              work.
             </p>
           </div>
 
@@ -78,9 +76,7 @@ export default function Home() {
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-semibold">Today</h2>
-                <p className="text-sm text-neutral-400">
-                  Your day at a glance.
-                </p>
+                <p className="text-sm text-neutral-400">Your day at a glance.</p>
               </div>
               <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm text-emerald-300">
                 On track
@@ -99,9 +95,7 @@ export default function Home() {
                         {item.time} · {item.type}
                       </p>
                       <h3 className="mt-1 text-lg font-medium">{item.title}</h3>
-                      <p className="mt-1 text-sm text-neutral-400">
-                        {item.detail}
-                      </p>
+                      <p className="mt-1 text-sm text-neutral-400">{item.detail}</p>
                     </div>
                     <button className="rounded-full border border-white/10 px-4 py-2 text-sm text-neutral-300 transition hover:border-violet-300 hover:text-white">
                       Mark done
@@ -155,9 +149,7 @@ export default function Home() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="font-medium">{project.name}</h3>
-                      <p className="mt-1 text-sm text-neutral-400">
-                        {project.next}
-                      </p>
+                      <p className="mt-1 text-sm text-neutral-400">{project.next}</p>
                     </div>
                     <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-neutral-300">
                       {project.status}

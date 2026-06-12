@@ -12,6 +12,10 @@ Ray is a creative professional in the show, choreography, and entertainment indu
 
 Important information is scattered across planners, notes, journals, apps, AI chats, calendars, and conversations. Because of that, important reminders, deadlines, follow-ups, and creative details can fall through the cracks.
 
+## Key Workflow Insight
+
+Ray color-codes his projects. Each project has an assigned color, and anything related to that project should visually carry that color so he can immediately recognize what project it belongs to.
+
 ## Primary Goal
 
 When Ray opens Tempo in the morning, he should immediately know:
