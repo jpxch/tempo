@@ -1,6 +1,14 @@
 # Tempo
 
-Tempo is a personal operations assistant for creative freelancers. This repo currently contains a polished static dashboard prototype built with Next.js, TypeScript, and Tailwind CSS.
+Tempo is a personal operations assistant for creative freelancers. This repo currently contains an early dashboard prototype focused on helping one user quickly understand what needs attention today, this week, and across active projects.
+
+## Current Status
+
+The product is currently in the concept-prototype stage:
+
+- Static dashboard with realistic sample data
+- Planning docs centered on Ray's daily workflow
+- Future phases scoped around local interaction first, then persistence, then auth
 
 ## Getting Started
 
@@ -22,10 +30,10 @@ You can start editing the prototype by modifying `app/page.tsx`. The page auto-u
 
 ## Project Docs
 
-- `docs/product-brief.md` — product vision, target user, and v0.1 scope
-- `docs/roadmap.md` — planned milestones from prototype to MVP
-- `docs/architecture.md` — stack and app structure
-- `docs/database.md` — future data model notes
+- `docs/product-brief.md` — product vision, core workflow, and early validation questions
+- `docs/roadmap.md` — phased milestones, success criteria, and realistic timeline
+- `docs/architecture.md` — stack, app structure, and technical sequencing
+- `docs/database.md` — deferred data model plan and guardrails
 
 ## Stack
 

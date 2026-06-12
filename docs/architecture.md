@@ -19,10 +19,22 @@
 
 ## Build Strategy
 
-Start with a static prototype using fake data.
+Start with a static prototype using fake data and validate the dashboard shape first.
 
-Once the dashboard experience feels right, connect real data with Supabase.
+Then move through these phases:
+
+- Static prototype with realistic sample content
+- Local state workflow for reminders, notes, and project context
+- Supabase persistence for validated entities only
+- Privacy and auth after the single-user workflow is dependable
 
 ## Design Principle
 
 The dashboard is the product. Other modules support the dashboard.
+
+## Product-Driven Technical Rules
+
+- Optimize for fast capture and morning review before adding integrations
+- Keep the initial data model small enough to change quickly
+- Treat project color-coding as product behavior, not decorative styling
+- Delay complex infrastructure until the core daily habit is proven

@@ -16,6 +16,14 @@ Important information is scattered across planners, notes, journals, apps, AI ch
 
 Ray color-codes his projects. Each project has an assigned color, and anything related to that project should visually carry that color so he can immediately recognize what project it belongs to.
 
+## Product Principles
+
+- Morning clarity over feature depth
+- Fast capture before perfect organization
+- Project context should be visible at a glance
+- Single-user usefulness matters more than multi-user flexibility
+- The dashboard should reduce stress, not create more sorting work
+
 ## Primary Goal
 
 When Ray opens Tempo in the morning, he should immediately know:
@@ -29,6 +37,12 @@ When Ray opens Tempo in the morning, he should immediately know:
 ## Product Role
 
 Tempo should feel less like a generic planner and more like a personal assistant at his side.
+
+## Core Use Case
+
+Ray opens Tempo in the morning, sees his top priorities, checks what is coming this week, and captures anything urgent before it slips away.
+
+If Tempo works, it should help him feel oriented within a minute.
 
 ## Version 0.1 Goal
 
@@ -49,6 +63,21 @@ The goal is to show Ray the concept and ask:
 - Quick capture box
 - Recent notes preview
 
+## Version 0.1 Success Criteria
+
+- Ray immediately understands what Tempo is for
+- Ray can point to at least one part of the dashboard he would use daily
+- Ray can identify what feels missing or confusing
+- The UI communicates project context clearly enough to validate the color-coding direction
+
+## Early Product Questions
+
+- Does Today need to be the dominant section, or should Follow-ups compete with it?
+- Should This Week be timeline-based or priority-based?
+- Does Quick Capture need categories, or should it stay frictionless?
+- How visible should project colors be across cards, reminders, and notes?
+- What is the minimum project detail Ray needs before the dashboard feels trustworthy?
+
 ## Not Version 0.1
 
 - Login
@@ -58,3 +87,4 @@ The goal is to show Ray the concept and ask:
 - Invoice PDFs
 - Google Calendar sync
 - File uploads
+- Team collaboration
