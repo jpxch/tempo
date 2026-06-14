@@ -4,6 +4,7 @@ import { ProjectsPanel } from '@/components/dashboard/ProjectsPanel';
 import { QuickCapture } from '@/components/dashboard/QuickCapture';
 import { TodayPanel } from '@/components/dashboard/TodayPanel';
 import { WeekPanel } from '@/components/dashboard/WeekPanel';
+import { AppShell } from '@/components/AppShell';
 import type { DashboardData } from '@/types/dashboard';
 
 const dashboardData: DashboardData = {
@@ -64,8 +65,8 @@ const dashboardData: DashboardData = {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-6 text-neutral-100">
-      <section className="mx-auto max-w-7xl space-y-6">
+    <AppShell>
+      <section className="space-y-6">
         <HeroSection />
 
         <section className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
@@ -82,6 +83,6 @@ export default function Home() {
           <NotesPanel notes={dashboardData.notes} />
         </section>
       </section>
-    </main>
+    </AppShell>
   );
 }
