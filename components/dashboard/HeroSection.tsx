@@ -1,6 +1,6 @@
 export function HeroSection() {
   return (
-    <header className="flex flex-col justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl md:flex-row md:items-center">
+    <header className="flex flex-col justify-between gap-4 rounded-3xl border border-white/10 bg-white/3 p-6 shadow-2xl md:flex-row md:items-center">
       <div>
         <p className="text-sm uppercase tracking-[0.3em] text-violet-300">Tempo</p>
 

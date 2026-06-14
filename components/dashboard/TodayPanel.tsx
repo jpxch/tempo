@@ -6,7 +6,7 @@ type TodayPanelProps = {
 
 export function TodayPanel({ items }: TodayPanelProps) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+    <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
       <div className="mb-5 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-semibold">Today</h2>

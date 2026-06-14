@@ -6,7 +6,7 @@ type ProjectsPanelProps = {
 
 export function ProjectsPanel({ projects }: ProjectsPanelProps) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+    <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
       <h2 className="text-2xl font-semibold">Active Projects</h2>
 
       <div className="mt-4 space-y-4">

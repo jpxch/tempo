@@ -4,7 +4,7 @@ type NotesPanelProps = {
 
 export function NotesPanel({ notes }: NotesPanelProps) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+    <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
       <h2 className="text-2xl font-semibold">Recent Creative Notes</h2>
 
       <div className="mt-4 space-y-4">

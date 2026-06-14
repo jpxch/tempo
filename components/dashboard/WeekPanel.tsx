@@ -4,7 +4,7 @@ type WeekPanelProps = {
 
 export function WeekPanel({ items }: WeekPanelProps) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+    <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
       <h2 className="text-2xl font-semibold">This Week</h2>
 
       <div className="mt-4 space-y-3">
