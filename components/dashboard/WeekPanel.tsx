@@ -11,7 +11,10 @@ export function WeekPanel({ items, projects }: WeekPanelProps) {
 
   return (
     <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
-      <h2 className="text-2xl font-semibold comfort:text-3xl">This Week</h2>
+      <h2 className="text-2xl font-semibold comfort:text-3xl">Weekly Rhythm</h2>
+      <p className="text-sm text-neutral-400 comfort:text-base">
+        What&apos;s coming up over the next few days.
+      </p>
 
       <div className="mt-4 space-y-3 comfort:mt-6 comfort:space-y-5">
         {items.map((item) => (

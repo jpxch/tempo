@@ -7,7 +7,10 @@ type ProjectsPanelProps = {
 export function ProjectsPanel({ projects }: ProjectsPanelProps) {
   return (
     <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
-      <h2 className="text-2xl font-semibold comfort:text-3xl">Active Projects</h2>
+      <h2 className="text-2xl font-semibold comfort:text-3xl">In Motion</h2>
+      <p className="text-sm text-neutral-400 comfort:text-base">
+        Current projects and important deadlines.
+      </p>
 
       <div className="mt-4 space-y-4 comfort:mt-6 comfort:space-y-5">
         {projects.map((project) => (

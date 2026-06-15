@@ -12,9 +12,9 @@ export function FollowUpsPanel({ followUps, projects }: FollowUpsPanelProps) {
   return (
     <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
       <div>
-        <h2 className="text-2xl font-semibold comfort:text-3xl">Follow Ups</h2>
+        <h2 className="text-2xl font-semibold comfort:text-3xl">Cue List</h2>
         <p className="text-sm text-neutral-400 comfort:text-base">
-          People waiting on your next move.
+          People and replies waiting on you.
         </p>
       </div>
 

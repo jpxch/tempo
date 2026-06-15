@@ -52,10 +52,10 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
 
   return (
     <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
-      <h2 className="text-2xl font-semibold comfort:text-3xl">Quick Capture</h2>
+      <h2 className="text-2xl font-semibold comfort:text-3xl">Catch a Beat</h2>
 
       <p className="mt-1 text-sm text-neutral-400 comfort:text-base">
-        Add something before it slips away.
+        Save a reminder or note before it slips.
       </p>
 
       <form className="mt-4 space-y-4 comfort:mt-6 comfort:space-y-5" onSubmit={handleSubmit}>

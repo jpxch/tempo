@@ -13,8 +13,10 @@ export function TodayPanel({ items, projects }: TodayPanelProps) {
     <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
       <div className="mb-5 flex items-center justify-between comfort:mb-6">
         <div>
-          <h2 className="text-2xl font-semibold comfort:text-3xl">Today</h2>
-          <p className="text-sm text-neutral-400 comfort:text-base">Your day at a glance.</p>
+          <h2 className="text-2xl font-semibold comfort:text-3xl">Opening Count</h2>
+          <p className="text-sm text-neutral-400 comfort:text-base">
+            What needs your attention today.
+          </p>
         </div>
 
         <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-sm text-emerald-300 comfort:px-4 comfort:py-2 comfort:text-base">
