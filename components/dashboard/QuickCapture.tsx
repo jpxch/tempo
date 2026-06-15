@@ -4,28 +4,38 @@ import { useState } from 'react';
 
 import type { Project } from '@/types/dashboard';
 
+type CaptureType = 'reminder' | 'note';
+
 type QuickCaptureProps = {
   projects: Project[];
-  onCapture: (input: { title: string; projectId: string }) => void;
+  onAddReminder: (input: { title: string; projectId: string }) => void;
+  onAddNote: (input: { text: string; projectId: string }) => void;
 };
 
-export function QuickCapture({ projects, onCapture }: QuickCaptureProps) {
-  const [title, setTitle] = useState('');
+export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptureProps) {
+  const [captureType, setCaptureType] = useState<CaptureType>('reminder');
+  const [text, setText] = useState('');
   const [projectId, setProjectId] = useState(projects[0]?.id ?? '');
   const [confirmation, setConfirmation] = useState('');
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const trimmedTitle = title.trim();
+    const trimmedText = text.trim();
 
-    if (!trimmedTitle || !projectId) {
+    if (!trimmedText || !projectId) {
       return;
     }
 
-    onCapture({ title: trimmedTitle, projectId });
-    setTitle('');
-    setConfirmation('Added to Today.');
+    if (captureType === 'reminder') {
+      onAddReminder({ title: trimmedText, projectId });
+      setConfirmation('Reminder added to Today.');
+    } else {
+      onAddNote({ text: trimmedText, projectId });
+      setConfirmation('Note added to Recent Creative Notes.');
+    }
+
+    setText('');
   }
 
   return (
@@ -33,19 +43,47 @@ export function QuickCapture({ projects, onCapture }: QuickCaptureProps) {
       <h2 className="text-2xl font-semibold">Quick Capture</h2>
 
       <p className="mt-1 text-sm text-neutral-400">
-        Add a reminder before it slips away.
+        Add something before it slips away.
       </p>
 
       <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
+        <fieldset>
+          <legend className="sr-only">Capture type</legend>
+          <div className="grid grid-cols-2 rounded-2xl border border-white/10 bg-neutral-950 p-1">
+            {(['reminder', 'note'] as const).map((type) => {
+              const isActive = captureType === type;
+
+              return (
+                <button
+                  key={type}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => {
+                    setCaptureType(type);
+                    setConfirmation('');
+                  }}
+                  className={`rounded-xl px-4 py-2 text-sm font-medium capitalize transition ${
+                    isActive
+                      ? 'bg-violet-400 text-neutral-950'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                >
+                  {type}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+
         <div>
-          <label className="sr-only" htmlFor="quick-capture-reminder">
-            Reminder
+          <label className="sr-only" htmlFor="quick-capture-text">
+            {captureType === 'reminder' ? 'Reminder' : 'Note'}
           </label>
           <textarea
-            id="quick-capture-reminder"
-            value={title}
+            id="quick-capture-text"
+            value={text}
             onChange={(event) => {
-              setTitle(event.target.value);
+              setText(event.target.value);
               setConfirmation('');
             }}
             onKeyDown={(event) => {
@@ -55,7 +93,11 @@ export function QuickCapture({ projects, onCapture }: QuickCaptureProps) {
               }
             }}
             className="min-h-28 w-full resize-none rounded-2xl border border-white/10 bg-neutral-950 p-4 text-sm outline-none placeholder:text-neutral-600 focus:border-violet-300"
-            placeholder="Example: call Sarah about rehearsal changes..."
+            placeholder={
+              captureType === 'reminder'
+                ? 'Example: call Sarah about rehearsal changes...'
+                : 'Example: try an alternate ending for the opening sequence...'
+            }
           />
         </div>
 
@@ -79,10 +121,10 @@ export function QuickCapture({ projects, onCapture }: QuickCaptureProps) {
 
         <button
           type="submit"
-          disabled={!title.trim() || !projectId}
+          disabled={!text.trim() || !projectId}
           className="w-full rounded-2xl bg-violet-400 px-4 py-3 font-medium text-neutral-950 transition hover:bg-violet-300 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Add reminder
+          Add {captureType}
         </button>
 
         <p className="min-h-5 text-sm text-emerald-300" aria-live="polite">

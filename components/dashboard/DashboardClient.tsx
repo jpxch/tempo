@@ -9,7 +9,7 @@ import { ProjectsPanel } from '@/components/dashboard/ProjectsPanel';
 import { QuickCapture } from '@/components/dashboard/QuickCapture';
 import { TodayPanel } from '@/components/dashboard/TodayPanel';
 import { WeekPanel } from '@/components/dashboard/WeekPanel';
-import type { DashboardData, TodayItem } from '@/types/dashboard';
+import type { DashboardData, Note, TodayItem } from '@/types/dashboard';
 
 type DashboardClientProps = {
   initialData: DashboardData;
@@ -34,6 +34,21 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
     }));
   }
 
+  function addNote(input: { text: string; projectId: string }) {
+    const note: Note = {
+      id: crypto.randomUUID(),
+      title: input.text,
+      preview: input.text,
+      projectId: input.projectId,
+      updatedLabel: 'Just now',
+    };
+
+    setDashboardData((currentData) => ({
+      ...currentData,
+      notes: [note, ...currentData.notes],
+    }));
+  }
+
   return (
     <section className="space-y-6">
       <HeroSection />
@@ -48,7 +63,11 @@ export function DashboardClient({ initialData }: DashboardClientProps) {
 
       <section className="grid gap-6 lg:grid-cols-2">
         <WeekPanel items={dashboardData.weekItems} projects={dashboardData.projects} />
-        <QuickCapture projects={dashboardData.projects} onCapture={addReminder} />
+        <QuickCapture
+          projects={dashboardData.projects}
+          onAddReminder={addReminder}
+          onAddNote={addNote}
+        />
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
