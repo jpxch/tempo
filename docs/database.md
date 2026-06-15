@@ -9,7 +9,7 @@ Copy `.env.example` to `.env.local` and fill in both values before running the a
 | Variable | Where used | Notes |
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | Server + browser | Safe to expose — no secrets |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Server + browser | Safe to expose — RLS enforces access |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Server + browser | Safe to expose — RLS enforces access |
 
 A service-role key is not required and must never appear in this codebase.
 
