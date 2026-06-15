@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-
+import { useTempo } from '@/components/TempoProvider';
 import { FollowUpsPanel } from '@/components/dashboard/FollowUpsPanel';
 import { HeroSection } from '@/components/dashboard/HeroSection';
 import { NotesPanel } from '@/components/dashboard/NotesPanel';
@@ -9,57 +8,17 @@ import { ProjectsPanel } from '@/components/dashboard/ProjectsPanel';
 import { QuickCapture } from '@/components/dashboard/QuickCapture';
 import { TodayPanel } from '@/components/dashboard/TodayPanel';
 import { WeekPanel } from '@/components/dashboard/WeekPanel';
-import type { DashboardData, Note, TodayItem } from '@/types/dashboard';
 
-type DashboardClientProps = {
-  initialData: DashboardData;
-};
-
-export function DashboardClient({ initialData }: DashboardClientProps) {
-  const [dashboardData, setDashboardData] = useState(initialData);
-  const [comfortView, setComfortView] = useState(true);
-
-  function addReminder(input: { title: string; projectId: string }) {
-    const reminder: TodayItem = {
-      id: crypto.randomUUID(),
-      time: 'Just now',
-      title: input.title,
-      detail: 'Captured locally in Tempo',
-      type: 'Reminder',
-      projectId: input.projectId,
-    };
-
-    setDashboardData((currentData) => ({
-      ...currentData,
-      todayItems: [reminder, ...currentData.todayItems],
-    }));
-  }
-
-  function addNote(input: { text: string; projectId: string }) {
-    const note: Note = {
-      id: crypto.randomUUID(),
-      title: input.text,
-      preview: input.text,
-      projectId: input.projectId,
-      updatedLabel: 'Just now',
-    };
-
-    setDashboardData((currentData) => ({
-      ...currentData,
-      notes: [note, ...currentData.notes],
-    }));
-  }
+export function DashboardClient() {
+  const { dashboardData, comfortView, setComfortView, addReminder, addNote } = useTempo();
 
   return (
-    <section
-      className="space-y-6 comfort:space-y-8"
-      data-comfort-view={comfortView}
-    >
+    <section className="space-y-6 comfort:space-y-8">
       <div className="flex justify-end">
         <button
           type="button"
           aria-pressed={comfortView}
-          onClick={() => setComfortView((currentView) => !currentView)}
+          onClick={() => setComfortView((current) => !current)}
           className={`min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition comfort:min-h-12 comfort:px-5 comfort:py-3 comfort:text-base ${
             comfortView
               ? 'border-violet-400/40 bg-violet-400/15 text-violet-200'
