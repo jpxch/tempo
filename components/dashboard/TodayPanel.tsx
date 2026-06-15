@@ -25,7 +25,7 @@ export function TodayPanel({ items, projects }: TodayPanelProps) {
       <div className="space-y-4">
         {items.map((item) => (
           <article
-            key={item.title}
+            key={item.id}
             className="rounded-2xl border border-white/10 bg-neutral-900/80 p-4"
             style={{
               borderLeft: `4px solid ${getProjectColor(item.projectId)}`,

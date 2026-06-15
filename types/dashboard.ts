@@ -1,4 +1,5 @@
 export type TodayItem = {
+  id: string;
   time: string;
   title: string;
   detail: string;

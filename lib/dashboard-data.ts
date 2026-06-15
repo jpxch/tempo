@@ -3,6 +3,7 @@ import type { DashboardData } from '@/types/dashboard';
 export const dashboardData: DashboardData = {
   todayItems: [
     {
+      id: 'review-rehearsal-plan',
       time: '9:00 AM',
       title: 'Review rehearsal plan',
       detail: 'Prep notes for today’s choreography session',
@@ -10,6 +11,7 @@ export const dashboardData: DashboardData = {
       projectId: 'artist-choreo-package',
     },
     {
+      id: 'follow-up-artist-team',
       time: '12:30 PM',
       title: 'Follow up with artist team',
       detail: 'Confirm music cut, room time, and dancers',
@@ -17,6 +19,7 @@ export const dashboardData: DashboardData = {
       projectId: 'artist-choreo-package',
     },
     {
+      id: 'creative-check-in',
       time: '4:00 PM',
       title: 'Creative check-in',
       detail: 'Review concept notes and update project direction',
