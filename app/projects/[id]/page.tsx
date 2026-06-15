@@ -1,3 +1,7 @@
+// force-dynamic: user-created projects have UUID IDs, so there is no finite
+// static list to pre-render. All project URLs render at request time.
+export const dynamic = 'force-dynamic';
+
 import { notFound } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
@@ -18,14 +22,4 @@ export default async function ProjectDetailPage(props: { params: Promise<{ id: s
   }
 
   return <ProjectDetailClient projectId={id} />;
-}
-
-// Statically enumerate the seeded project IDs so the build does not require
-// a live Supabase connection. Update this list when new projects are added.
-export function generateStaticParams() {
-  return [
-    { id: 'artist-choreo-package' },
-    { id: 'live-show-prep' },
-    { id: 'workshop-series' },
-  ];
 }

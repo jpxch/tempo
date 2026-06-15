@@ -5,6 +5,27 @@
 export type Database = {
   public: {
     Tables: {
+      clients: {
+        Row: {
+          id: string;
+          name: string;
+          contact_name: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          contact_name?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          contact_name?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       projects: {
         Row: {
           id: string;
@@ -12,6 +33,7 @@ export type Database = {
           status: string;
           next: string;
           color: string;
+          client_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -20,6 +42,7 @@ export type Database = {
           status: string;
           next?: string;
           color: string;
+          client_id?: string | null;
           created_at?: string;
         };
         Update: {
@@ -28,6 +51,7 @@ export type Database = {
           status?: string;
           next?: string;
           color?: string;
+          client_id?: string | null;
           created_at?: string;
         };
         Relationships: [];

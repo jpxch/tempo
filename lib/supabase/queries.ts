@@ -2,7 +2,23 @@
 // Uses the anon key — RLS enforces access control.
 
 import { createClient } from './server';
-import type { Note, Project, TodayItem } from '@/types/dashboard';
+import type { Client, Note, Project, TodayItem } from '@/types/dashboard';
+
+export async function fetchClients(): Promise<Client[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*')
+    .order('created_at', { ascending: true });
+
+  if (error) throw new Error(`Failed to fetch clients: ${error.message}`);
+
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    name: row.name,
+    contactName: row.contact_name,
+  }));
+}
 
 export async function fetchProjects(): Promise<Project[]> {
   const supabase = await createClient();
@@ -19,6 +35,7 @@ export async function fetchProjects(): Promise<Project[]> {
     status: row.status,
     next: row.next,
     color: row.color,
+    clientId: row.client_id,
   }));
 }
 

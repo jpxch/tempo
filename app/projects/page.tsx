@@ -1,10 +1,7 @@
-import { PlaceholderPage } from '@/components/shared/PlaceholderPage';
+import { fetchClients, fetchProjects } from '@/lib/supabase/queries';
+import { ProjectsClient } from '@/components/projects/ProjectsClient';
 
-export default function ProjectsPage() {
-  return (
-    <PlaceholderPage
-      title="Projects"
-      description="Project management for Tempo will live here."
-    />
-  );
+export default async function ProjectsPage() {
+  const [projects, clients] = await Promise.all([fetchProjects(), fetchClients()]);
+  return <ProjectsClient initialProjects={projects} initialClients={clients} />;
 }

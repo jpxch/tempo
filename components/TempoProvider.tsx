@@ -31,8 +31,17 @@ type TempoProviderProps = {
 
 export function TempoProvider({ children, initialData }: TempoProviderProps) {
   const [dashboardData, setDashboardData] = useState<DashboardData>(initialData);
+  const [prevInitialData, setPrevInitialData] = useState<DashboardData>(initialData);
   const [comfortView, setComfortView] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  // Sync dashboard state when the root layout re-fetches after router.refresh().
+  // This React "adjusting state during render" pattern avoids an extra render
+  // cycle vs. useEffect and does not retrigger the effect-lint rule.
+  if (prevInitialData !== initialData) {
+    setPrevInitialData(initialData);
+    setDashboardData(initialData);
+  }
 
   async function addReminder(input: { title: string; projectId: string }) {
     if (saving) return;

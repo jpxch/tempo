@@ -1,7 +1,7 @@
-import { PlaceholderPage } from '@/components/shared/PlaceholderPage';
+import { fetchNotes, fetchProjects } from '@/lib/supabase/queries';
+import { NotesClient } from '@/components/notes/NotesClient';
 
-export default function NotesPage() {
-  return (
-    <PlaceholderPage title="Notes" description="Note management for Tempo will live here." />
-  );
+export default async function NotesPage() {
+  const [notes, projects] = await Promise.all([fetchNotes(), fetchProjects()]);
+  return <NotesClient initialNotes={notes} initialProjects={projects} />;
 }

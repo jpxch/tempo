@@ -1,3 +1,18 @@
+export type Client = {
+  id: string;
+  name: string;
+  contactName: string | null;
+};
+
+export type Project = {
+  id: string;
+  name: string;
+  status: string;
+  next: string;
+  color: string;
+  clientId: string | null;
+};
+
 export type TodayItem = {
   id: string;
   time: string;
@@ -26,14 +41,6 @@ export type Note = {
   preview: string;
   projectId: string;
   updatedLabel: string;
-};
-
-export type Project = {
-  id: string;
-  name: string;
-  status: string;
-  next: string;
-  color: string;
 };
 
 export type DashboardData = {
