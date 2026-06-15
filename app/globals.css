@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant comfort (&:where([data-comfort-view="true"], [data-comfort-view="true"] *));
 
 @theme inline {
   --color-background: var(--background);

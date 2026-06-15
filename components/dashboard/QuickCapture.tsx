@@ -39,17 +39,17 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
   }
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
-      <h2 className="text-2xl font-semibold">Quick Capture</h2>
+    <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
+      <h2 className="text-2xl font-semibold comfort:text-3xl">Quick Capture</h2>
 
-      <p className="mt-1 text-sm text-neutral-400">
+      <p className="mt-1 text-sm text-neutral-400 comfort:text-base">
         Add something before it slips away.
       </p>
 
-      <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
+      <form className="mt-4 space-y-4 comfort:mt-6 comfort:space-y-5" onSubmit={handleSubmit}>
         <fieldset>
           <legend className="sr-only">Capture type</legend>
-          <div className="grid grid-cols-2 rounded-2xl border border-white/10 bg-neutral-950 p-1">
+          <div className="grid grid-cols-2 rounded-2xl border border-white/10 bg-neutral-950 p-1 comfort:p-1.5">
             {(['reminder', 'note'] as const).map((type) => {
               const isActive = captureType === type;
 
@@ -62,7 +62,7 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
                     setCaptureType(type);
                     setConfirmation('');
                   }}
-                  className={`rounded-xl px-4 py-2 text-sm font-medium capitalize transition ${
+                  className={`min-h-11 rounded-xl px-4 py-2 text-sm font-medium capitalize transition comfort:min-h-12 comfort:px-5 comfort:py-3 comfort:text-base ${
                     isActive
                       ? 'bg-violet-400 text-neutral-950'
                       : 'text-neutral-400 hover:text-white'
@@ -92,7 +92,7 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
                 event.currentTarget.form?.requestSubmit();
               }
             }}
-            className="min-h-28 w-full resize-none rounded-2xl border border-white/10 bg-neutral-950 p-4 text-sm outline-none placeholder:text-neutral-600 focus:border-violet-300"
+            className="min-h-28 w-full resize-none rounded-2xl border border-white/10 bg-neutral-950 p-4 text-sm outline-none comfort:min-h-36 comfort:p-5 comfort:text-base placeholder:text-neutral-600 focus:border-violet-300"
             placeholder={
               captureType === 'reminder'
                 ? 'Example: call Sarah about rehearsal changes...'
@@ -102,14 +102,14 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
         </div>
 
         <div>
-          <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-neutral-500" htmlFor="quick-capture-project">
+          <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm" htmlFor="quick-capture-project">
             Project
           </label>
           <select
             id="quick-capture-project"
             value={projectId}
             onChange={(event) => setProjectId(event.target.value)}
-            className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 outline-none focus:border-violet-300"
+            className="min-h-11 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm text-neutral-200 outline-none comfort:min-h-14 comfort:px-5 comfort:text-base focus:border-violet-300"
           >
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
@@ -122,12 +122,15 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
         <button
           type="submit"
           disabled={!text.trim() || !projectId}
-          className="w-full rounded-2xl bg-violet-400 px-4 py-3 font-medium text-neutral-950 transition hover:bg-violet-300 disabled:cursor-not-allowed disabled:opacity-40"
+          className="min-h-11 w-full rounded-2xl bg-violet-400 px-4 py-3 font-medium text-neutral-950 transition comfort:min-h-14 comfort:px-5 comfort:text-lg hover:bg-violet-300 disabled:cursor-not-allowed disabled:opacity-40"
         >
           Add {captureType}
         </button>
 
-        <p className="min-h-5 text-sm text-emerald-300" aria-live="polite">
+        <p
+          className="min-h-5 text-sm text-emerald-300 comfort:min-h-6 comfort:text-base"
+          aria-live="polite"
+        >
           {confirmation}
         </p>
       </form>

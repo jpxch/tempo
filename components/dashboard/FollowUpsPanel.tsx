@@ -10,28 +10,32 @@ export function FollowUpsPanel({ followUps, projects }: FollowUpsPanelProps) {
     projects.find((project) => project.id === projectId)?.color ?? '#737373';
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
+    <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
       <div>
-        <h2 className="text-2xl font-semibold">Follow Ups</h2>
-        <p className="text-sm text-neutral-400">People waiting on your next move.</p>
+        <h2 className="text-2xl font-semibold comfort:text-3xl">Follow Ups</h2>
+        <p className="text-sm text-neutral-400 comfort:text-base">
+          People waiting on your next move.
+        </p>
       </div>
 
-      <div className="mt-5 space-y-4">
+      <div className="mt-5 space-y-4 comfort:mt-6 comfort:space-y-5">
         {followUps.map((followUp) => (
           <article
             key={`${followUp.projectId}-${followUp.person}`}
-            className="rounded-2xl border border-white/10 bg-neutral-900/80 p-4"
+            className="rounded-2xl border border-white/10 bg-neutral-900/80 p-4 comfort:p-6"
             style={{
               borderLeft: `4px solid ${getProjectColor(followUp.projectId)}`,
             }}
           >
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-4 comfort:gap-5">
               <div>
-                <h3 className="font-medium">{followUp.person}</h3>
-                <p className="mt-1 text-sm text-neutral-400">{followUp.reason}</p>
+                <h3 className="font-medium comfort:text-xl">{followUp.person}</h3>
+                <p className="mt-1 text-sm text-neutral-400 comfort:text-base">
+                  {followUp.reason}
+                </p>
               </div>
 
-              <span className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-xs text-neutral-300">
+              <span className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-xs text-neutral-300 comfort:px-4 comfort:py-2 comfort:text-sm">
                 {followUp.dueLabel}
               </span>
             </div>
