@@ -15,7 +15,7 @@ export default function Home() {
         <TodayPanel items={dashboardData.todayItems} projects={dashboardData.projects} />
 
         <aside className="space-y-6">
-          <WeekPanel items={dashboardData.weekItems} />
+          <WeekPanel items={dashboardData.weekItems} projects={dashboardData.projects} />
           <QuickCapture />
         </aside>
       </section>

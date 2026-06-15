@@ -6,6 +6,12 @@ export type TodayItem = {
   projectId: string;
 };
 
+export type WeekItem = {
+  title: string;
+  dueLabel: string;
+  projectId: string;
+};
+
 export type Project = {
   id: string;
   name: string;
@@ -16,7 +22,7 @@ export type Project = {
 
 export type DashboardData = {
   todayItems: TodayItem[];
-  weekItems: string[];
+  weekItems: WeekItem[];
   projects: Project[];
   notes: string[];
 };

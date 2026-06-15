@@ -26,28 +26,40 @@ export const dashboardData: DashboardData = {
   ],
 
   weekItems: [
-    'Showcase rehearsal on Thursday',
-    'Payment follow-up due Friday',
-    'New artist concept review this weekend',
+    {
+      title: 'Showcase rehearsal',
+      dueLabel: 'Thursday',
+      projectId: 'live-show-prep',
+    },
+    {
+      title: 'Payment follow-up',
+      dueLabel: 'Friday',
+      projectId: 'artist-choreo-package',
+    },
+    {
+      title: 'New artist concept review',
+      dueLabel: 'Weekend',
+      projectId: 'workshop-series',
+    },
   ],
 
   projects: [
     {
-        id: 'artist-choreo-package',
+      id: 'artist-choreo-package',
       name: 'Artist Choreo Package',
       status: 'Active',
       next: 'Needs music notes cleaned up',
       color: '#a78bfa',
     },
     {
-        id: 'live-show-prep',
+      id: 'live-show-prep',
       name: 'Live Show Prep',
       status: 'Upcoming',
       next: 'Confirm dancers and rehearsal space',
       color: '#38bdf8',
     },
     {
-        id: 'workshop-series',
+      id: 'workshop-series',
       name: 'Workshop Series',
       status: 'Waiting',
       next: 'Waiting on client approval',
