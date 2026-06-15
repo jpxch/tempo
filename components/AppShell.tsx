@@ -1,12 +1,5 @@
 import Link from 'next/link';
-
-const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'Clients', href: '/clients' },
-  { label: 'Notes', href: '/notes' },
-  { label: 'Reminders', href: '/reminders' },
-];
+import { NavLinks } from '@/components/NavLinks';
 
 type AppShellProps = {
   children: React.ReactNode;
@@ -21,17 +14,7 @@ export function AppShell({ children }: AppShellProps) {
             Tempo
           </Link>
 
-          <div className="flex flex-wrap gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-full px-4 py-2 text-sm text-neutral-400 transition hover:bg-white/10 hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
+          <NavLinks />
         </nav>
 
         {children}

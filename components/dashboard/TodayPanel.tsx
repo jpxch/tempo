@@ -7,7 +7,7 @@ type TodayPanelProps = {
 
 export function TodayPanel({ items, projects }: TodayPanelProps) {
   const getProjectColor = (projectId: string) =>
-    projects.find((project) => project.id === projectId)?.color ?? '#a737373';
+    projects.find((project) => project.id === projectId)?.color ?? '#737373';
 
   return (
     <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
