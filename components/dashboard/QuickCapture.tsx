@@ -8,11 +8,12 @@ type CaptureType = 'reminder' | 'note';
 
 type QuickCaptureProps = {
   projects: Project[];
-  onAddReminder: (input: { title: string; projectId: string }) => void;
-  onAddNote: (input: { text: string; projectId: string }) => void;
+  saving: boolean;
+  onAddReminder: (input: { title: string; projectId: string }) => Promise<void>;
+  onAddNote: (input: { text: string; projectId: string }) => Promise<void>;
 };
 
-export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptureProps) {
+export function QuickCapture({ projects, saving, onAddReminder, onAddNote }: QuickCaptureProps) {
   const [captureType, setCaptureType] = useState<CaptureType>('reminder');
   const [text, setText] = useState('');
   const [projectId, setProjectId] = useState(projects[0]?.id ?? '');
@@ -20,8 +21,10 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
   const [messageType, setMessageType] = useState<'success' | 'error'>('success');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (saving) return;
 
     const trimmedText = text.trim();
 
@@ -38,16 +41,21 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
       return;
     }
 
-    if (captureType === 'reminder') {
-      onAddReminder({ title: trimmedText, projectId });
-      setMessage('Reminder added to Today.');
-    } else {
-      onAddNote({ text: trimmedText, projectId });
-      setMessage('Note added to Recent Creative Notes.');
+    try {
+      if (captureType === 'reminder') {
+        await onAddReminder({ title: trimmedText, projectId });
+        setMessage('Reminder saved.');
+      } else {
+        await onAddNote({ text: trimmedText, projectId });
+        setMessage('Note saved.');
+      }
+      setMessageType('success');
+      setText('');
+    } catch {
+      setMessage('Could not save. Check your connection and try again.');
+      setMessageType('error');
+      // text is intentionally preserved so nothing is lost on failure
     }
-
-    setMessageType('success');
-    setText('');
   }
 
   return (
@@ -117,7 +125,10 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
         </div>
 
         <div>
-          <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm" htmlFor="quick-capture-project">
+          <label
+            className="mb-2 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm"
+            htmlFor="quick-capture-project"
+          >
             Project
           </label>
           <select
@@ -136,9 +147,10 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
 
         <button
           type="submit"
-          className="min-h-11 w-full cursor-pointer rounded-2xl bg-violet-400 px-4 py-3 font-medium text-neutral-950 transition comfort:min-h-14 comfort:px-5 comfort:text-lg hover:bg-violet-300"
+          disabled={saving}
+          className="min-h-11 w-full cursor-pointer rounded-2xl bg-violet-400 px-4 py-3 font-medium text-neutral-950 transition comfort:min-h-14 comfort:px-5 comfort:text-lg hover:bg-violet-300 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Add {captureType}
+          {saving ? 'Saving…' : `Add ${captureType}`}
         </button>
 
         <p

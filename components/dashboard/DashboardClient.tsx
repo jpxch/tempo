@@ -10,7 +10,7 @@ import { TodayPanel } from '@/components/dashboard/TodayPanel';
 import { WeekPanel } from '@/components/dashboard/WeekPanel';
 
 export function DashboardClient() {
-  const { dashboardData, comfortView, setComfortView, addReminder, addNote } = useTempo();
+  const { dashboardData, comfortView, setComfortView, addReminder, addNote, saving } = useTempo();
 
   return (
     <section className="space-y-6 comfort:space-y-8">
@@ -45,6 +45,7 @@ export function DashboardClient() {
           projects={dashboardData.projects}
           onAddReminder={addReminder}
           onAddNote={addNote}
+          saving={saving}
         />
       </section>
 

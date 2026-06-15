@@ -2,14 +2,15 @@
 
 import { createContext, useContext, useState } from 'react';
 
-import { dashboardData as seedData } from '@/lib/dashboard-data';
-import type { DashboardData, Note, TodayItem } from '@/types/dashboard';
+import { insertReminder, insertNote } from '@/lib/supabase/mutations';
+import type { DashboardData } from '@/types/dashboard';
 
 type TempoContextValue = {
   dashboardData: DashboardData;
   comfortView: boolean;
-  addReminder: (input: { title: string; projectId: string }) => void;
-  addNote: (input: { text: string; projectId: string }) => void;
+  saving: boolean;
+  addReminder: (input: { title: string; projectId: string }) => Promise<void>;
+  addNote: (input: { text: string; projectId: string }) => Promise<void>;
   setComfortView: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -23,44 +24,49 @@ export function useTempo(): TempoContextValue {
   return context;
 }
 
-export function TempoProvider({ children }: { children: React.ReactNode }) {
-  const [dashboardData, setDashboardData] = useState<DashboardData>(seedData);
-  const [comfortView, setComfortView] = useState(true);
+type TempoProviderProps = {
+  children: React.ReactNode;
+  initialData: DashboardData;
+};
 
-  function addReminder(input: { title: string; projectId: string }) {
-    const reminder: TodayItem = {
-      id: crypto.randomUUID(),
-      time: 'Just now',
-      title: input.title,
-      detail: 'Captured locally in Tempo',
-      type: 'Reminder',
-      projectId: input.projectId,
-    };
-    setDashboardData((current) => ({
-      ...current,
-      todayItems: [reminder, ...current.todayItems],
-    }));
+export function TempoProvider({ children, initialData }: TempoProviderProps) {
+  const [dashboardData, setDashboardData] = useState<DashboardData>(initialData);
+  const [comfortView, setComfortView] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  async function addReminder(input: { title: string; projectId: string }) {
+    if (saving) return;
+    setSaving(true);
+    try {
+      const reminder = await insertReminder(input);
+      setDashboardData((current) => ({
+        ...current,
+        todayItems: [reminder, ...current.todayItems],
+      }));
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function addNote(input: { text: string; projectId: string }) {
-    const note: Note = {
-      id: crypto.randomUUID(),
-      title: input.text,
-      preview: input.text,
-      projectId: input.projectId,
-      updatedLabel: 'Just now',
-    };
-    setDashboardData((current) => ({
-      ...current,
-      notes: [note, ...current.notes],
-    }));
+  async function addNote(input: { text: string; projectId: string }) {
+    if (saving) return;
+    setSaving(true);
+    try {
+      const note = await insertNote(input);
+      setDashboardData((current) => ({
+        ...current,
+        notes: [note, ...current.notes],
+      }));
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
-    <TempoContext.Provider value={{ dashboardData, comfortView, addReminder, addNote, setComfortView }}>
-      <div data-comfort-view={comfortView}>
-        {children}
-      </div>
+    <TempoContext.Provider
+      value={{ dashboardData, comfortView, saving, addReminder, addNote, setComfortView }}
+    >
+      <div data-comfort-view={comfortView}>{children}</div>
     </TempoContext.Provider>
   );
 }
