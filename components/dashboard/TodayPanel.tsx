@@ -1,10 +1,14 @@
-import type { TodayItem } from '@/types/dashboard';
+import type { Project, TodayItem } from '@/types/dashboard';
 
 type TodayPanelProps = {
   items: TodayItem[];
+  projects: Project[];
 };
 
-export function TodayPanel({ items }: TodayPanelProps) {
+export function TodayPanel({ items, projects }: TodayPanelProps) {
+  const getProjectColor = (projectId: string) =>
+    projects.find((project) => project.id === projectId)?.color ?? '#a737373';
+
   return (
     <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
       <div className="mb-5 flex items-center justify-between">
@@ -23,7 +27,9 @@ export function TodayPanel({ items }: TodayPanelProps) {
           <article
             key={item.title}
             className="rounded-2xl border border-white/10 bg-neutral-900/80 p-4"
-            style={{ borderLeft: `4px solid ${item.projectColor}` }}
+            style={{
+              borderLeft: `4px solid ${getProjectColor(item.projectId)}`,
+            }}
           >
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>

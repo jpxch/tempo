@@ -14,7 +14,7 @@ export default function Home() {
         <HeroSection />
 
         <section className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
-          <TodayPanel items={dashboardData.todayItems} />
+          <TodayPanel items={dashboardData.todayItems} projects={dashboardData.projects} />
 
           <aside className="space-y-6">
             <WeekPanel items={dashboardData.weekItems} />
