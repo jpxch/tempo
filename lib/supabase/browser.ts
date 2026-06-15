@@ -1,14 +1,11 @@
-// Browser-only Supabase client singleton.
+// Browser-only Supabase client.
 // Import only from Client Components — never from Server Components or Server Actions.
+// createBrowserClient from @supabase/ssr handles singleton behavior internally.
 
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 import type { Database } from './types';
 
-let browserClient: ReturnType<typeof createClient<Database>> | null = null;
-
 export function getBrowserClient() {
-  if (browserClient) return browserClient;
-
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -20,6 +17,5 @@ export function getBrowserClient() {
     );
   }
 
-  browserClient = createClient<Database>(url, key);
-  return browserClient;
+  return createBrowserClient<Database>(url, key);
 }

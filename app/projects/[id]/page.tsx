@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation';
 
-import { createServerClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { ProjectDetailClient } from '@/components/projects/ProjectDetailClient';
 
 export default async function ProjectDetailPage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
 
-  const supabase = createServerClient();
+  const supabase = await createClient();
   const { data: project } = await supabase
     .from('projects')
     .select('id')

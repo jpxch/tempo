@@ -1,11 +1,11 @@
 // Server-side read functions. Import only from Server Components.
 // Uses the anon key — RLS enforces access control.
 
-import { createServerClient } from './server';
+import { createClient } from './server';
 import type { Note, Project, TodayItem } from '@/types/dashboard';
 
 export async function fetchProjects(): Promise<Project[]> {
-  const supabase = createServerClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('projects')
     .select('*')
@@ -23,7 +23,7 @@ export async function fetchProjects(): Promise<Project[]> {
 }
 
 export async function fetchReminders(): Promise<TodayItem[]> {
-  const supabase = createServerClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('reminders')
     .select('*')
@@ -42,7 +42,7 @@ export async function fetchReminders(): Promise<TodayItem[]> {
 }
 
 export async function fetchNotes(): Promise<Note[]> {
-  const supabase = createServerClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('notes')
     .select('*')
