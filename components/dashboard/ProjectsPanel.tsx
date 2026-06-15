@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Project } from '@/types/dashboard';
 
 type ProjectsPanelProps = {
@@ -14,9 +15,10 @@ export function ProjectsPanel({ projects }: ProjectsPanelProps) {
 
       <div className="mt-4 space-y-4 comfort:mt-6 comfort:space-y-5">
         {projects.map((project) => (
-          <article
-            key={project.name}
-            className="rounded-2xl border border-white/10 bg-neutral-900/80 p-4 comfort:p-6"
+          <Link
+            key={project.id}
+            href={`/projects/${project.id}`}
+            className="block rounded-2xl border border-white/10 bg-neutral-900/80 p-4 transition hover:bg-neutral-800/80 comfort:p-6"
             style={{ borderLeft: `4px solid ${project.color}` }}
           >
             <div className="flex items-start justify-between gap-4 comfort:gap-5">
@@ -29,7 +31,7 @@ export function ProjectsPanel({ projects }: ProjectsPanelProps) {
                 {project.status}
               </span>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </div>
