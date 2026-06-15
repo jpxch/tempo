@@ -43,6 +43,27 @@ export const dashboardData: DashboardData = {
     },
   ],
 
+  followUps: [
+    {
+      person: 'Artist Manager',
+      reason: 'Waiting on final music cut',
+      dueLabel: 'Today',
+      projectId: 'artist-choreo-package',
+    },
+    {
+      person: 'Venue Coordinator',
+      reason: 'Need stage dimensions',
+      dueLabel: 'Tomorrow',
+      projectId: 'live-show-prep',
+    },
+    {
+      person: 'Workshop Client',
+      reason: 'Approval pending',
+      dueLabel: 'This Week',
+      projectId: 'workshop-series',
+    },
+  ],
+
   projects: [
     {
       id: 'artist-choreo-package',
@@ -68,8 +89,26 @@ export const dashboardData: DashboardData = {
   ],
 
   notes: [
-    'Bridge section needs stronger transition.',
-    'Try formation change after second chorus.',
-    'Ask about lighting cues before final rehearsal.',
+    {
+      id: 'bridge-transition',
+      title: 'Bridge transition',
+      preview: 'Bridge section needs a stronger transition.',
+      projectId: 'artist-choreo-package',
+      updatedLabel: 'Updated today',
+    },
+    {
+      id: 'formation-change',
+      title: 'Formation idea',
+      preview: 'Try a formation change after the second chorus.',
+      projectId: 'live-show-prep',
+      updatedLabel: 'Updated yesterday',
+    },
+    {
+      id: 'lighting-cues',
+      title: 'Lighting questions',
+      preview: 'Ask about lighting cues before the final rehearsal.',
+      projectId: 'workshop-series',
+      updatedLabel: 'Updated Monday',
+    },
   ],
 };

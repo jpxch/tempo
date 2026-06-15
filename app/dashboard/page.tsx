@@ -1,3 +1,4 @@
+import { FollowUpsPanel } from '@/components/dashboard/FollowUpsPanel';
 import { HeroSection } from '@/components/dashboard/HeroSection';
 import { NotesPanel } from '@/components/dashboard/NotesPanel';
 import { ProjectsPanel } from '@/components/dashboard/ProjectsPanel';
@@ -13,16 +14,20 @@ export default function Home() {
 
       <section className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
         <TodayPanel items={dashboardData.todayItems} projects={dashboardData.projects} />
+        <FollowUpsPanel
+          followUps={dashboardData.followUps}
+          projects={dashboardData.projects}
+        />
+      </section>
 
-        <aside className="space-y-6">
-          <WeekPanel items={dashboardData.weekItems} projects={dashboardData.projects} />
-          <QuickCapture />
-        </aside>
+      <section className="grid gap-6 lg:grid-cols-2">
+        <WeekPanel items={dashboardData.weekItems} projects={dashboardData.projects} />
+        <QuickCapture />
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
         <ProjectsPanel projects={dashboardData.projects} />
-        <NotesPanel notes={dashboardData.notes} />
+        <NotesPanel notes={dashboardData.notes} projects={dashboardData.projects} />
       </section>
     </section>
   );

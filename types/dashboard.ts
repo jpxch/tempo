@@ -12,6 +12,21 @@ export type WeekItem = {
   projectId: string;
 };
 
+export type FollowUp = {
+  person: string;
+  reason: string;
+  dueLabel: string;
+  projectId: string;
+};
+
+export type Note = {
+  id: string;
+  title: string;
+  preview: string;
+  projectId: string;
+  updatedLabel: string;
+};
+
 export type Project = {
   id: string;
   name: string;
@@ -23,6 +38,7 @@ export type Project = {
 export type DashboardData = {
   todayItems: TodayItem[];
   weekItems: WeekItem[];
+  followUps: FollowUp[];
   projects: Project[];
-  notes: string[];
+  notes: Note[];
 };
