@@ -17,7 +17,7 @@ type DashboardClientProps = {
 
 export function DashboardClient({ initialData }: DashboardClientProps) {
   const [dashboardData, setDashboardData] = useState(initialData);
-  const [comfortView, setComfortView] = useState(false);
+  const [comfortView, setComfortView] = useState(true);
 
   function addReminder(input: { title: string; projectId: string }) {
     const reminder: TodayItem = {

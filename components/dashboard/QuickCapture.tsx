@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import type { Project } from '@/types/dashboard';
 
@@ -16,25 +16,37 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
   const [captureType, setCaptureType] = useState<CaptureType>('reminder');
   const [text, setText] = useState('');
   const [projectId, setProjectId] = useState(projects[0]?.id ?? '');
-  const [confirmation, setConfirmation] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const trimmedText = text.trim();
 
-    if (!trimmedText || !projectId) {
+    if (!trimmedText) {
+      setMessage(`Enter a ${captureType} first.`);
+      setMessageType('error');
+      textAreaRef.current?.focus();
+      return;
+    }
+
+    if (!projectId) {
+      setMessage('Choose a project first.');
+      setMessageType('error');
       return;
     }
 
     if (captureType === 'reminder') {
       onAddReminder({ title: trimmedText, projectId });
-      setConfirmation('Reminder added to Today.');
+      setMessage('Reminder added to Today.');
     } else {
       onAddNote({ text: trimmedText, projectId });
-      setConfirmation('Note added to Recent Creative Notes.');
+      setMessage('Note added to Recent Creative Notes.');
     }
 
+    setMessageType('success');
     setText('');
   }
 
@@ -60,7 +72,8 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
                   aria-pressed={isActive}
                   onClick={() => {
                     setCaptureType(type);
-                    setConfirmation('');
+                    setMessage('');
+                    textAreaRef.current?.focus();
                   }}
                   className={`min-h-11 rounded-xl px-4 py-2 text-sm font-medium capitalize transition comfort:min-h-12 comfort:px-5 comfort:py-3 comfort:text-base ${
                     isActive
@@ -80,11 +93,12 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
             {captureType === 'reminder' ? 'Reminder' : 'Note'}
           </label>
           <textarea
+            ref={textAreaRef}
             id="quick-capture-text"
             value={text}
             onChange={(event) => {
               setText(event.target.value);
-              setConfirmation('');
+              setMessage('');
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey) {
@@ -92,6 +106,7 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
                 event.currentTarget.form?.requestSubmit();
               }
             }}
+            aria-describedby="quick-capture-message"
             className="min-h-28 w-full resize-none rounded-2xl border border-white/10 bg-neutral-950 p-4 text-sm outline-none comfort:min-h-36 comfort:p-5 comfort:text-base placeholder:text-neutral-600 focus:border-violet-300"
             placeholder={
               captureType === 'reminder'
@@ -121,17 +136,20 @@ export function QuickCapture({ projects, onAddReminder, onAddNote }: QuickCaptur
 
         <button
           type="submit"
-          disabled={!text.trim() || !projectId}
-          className="min-h-11 w-full rounded-2xl bg-violet-400 px-4 py-3 font-medium text-neutral-950 transition comfort:min-h-14 comfort:px-5 comfort:text-lg hover:bg-violet-300 disabled:cursor-not-allowed disabled:opacity-40"
+          className="min-h-11 w-full cursor-pointer rounded-2xl bg-violet-400 px-4 py-3 font-medium text-neutral-950 transition comfort:min-h-14 comfort:px-5 comfort:text-lg hover:bg-violet-300"
         >
           Add {captureType}
         </button>
 
         <p
-          className="min-h-5 text-sm text-emerald-300 comfort:min-h-6 comfort:text-base"
+          id="quick-capture-message"
+          className={`min-h-5 text-sm comfort:min-h-6 comfort:text-base ${
+            messageType === 'error' ? 'text-amber-300' : 'text-emerald-300'
+          }`}
+          role="status"
           aria-live="polite"
         >
-          {confirmation}
+          {message}
         </p>
       </form>
     </div>
