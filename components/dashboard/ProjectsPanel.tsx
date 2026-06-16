@@ -14,6 +14,15 @@ export function ProjectsPanel({ projects }: ProjectsPanelProps) {
       </p>
 
       <div className="mt-4 space-y-4 comfort:mt-6 comfort:space-y-5">
+        {projects.length === 0 && (
+          <p className="text-sm text-neutral-500 comfort:text-base">
+            No projects yet.{' '}
+            <Link href="/projects" className="text-violet-300 hover:underline">
+              Add your first project
+            </Link>{' '}
+            to start tracking.
+          </p>
+        )}
         {projects.map((project) => (
           <Link
             key={project.id}

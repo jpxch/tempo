@@ -115,6 +115,7 @@ export function ClientsClient({ initialClients, initialProjects }: ClientsClient
         <ClientForm
           form={newForm}
           saving={saving}
+          formId="client-create"
           onChange={setNewForm}
           onSave={handleCreate}
           onCancel={() => { setCreating(false); setError(null); }}
@@ -140,6 +141,7 @@ export function ClientsClient({ initialClients, initialProjects }: ClientsClient
                 key={client.id}
                 form={editForm}
                 saving={saving}
+                formId="client-edit"
                 onChange={setEditForm}
                 onSave={() => handleUpdate(client.id)}
                 onCancel={() => { setEditingId(null); setError(null); }}
@@ -226,21 +228,23 @@ export function ClientsClient({ initialClients, initialProjects }: ClientsClient
 type ClientFormProps = {
   form: FormData;
   saving: boolean;
+  formId: string;
   onChange: (form: FormData) => void;
   onSave: () => void;
   onCancel: () => void;
 };
 
-function ClientForm({ form, saving, onChange, onSave, onCancel }: ClientFormProps) {
+function ClientForm({ form, saving, formId, onChange, onSave, onCancel }: ClientFormProps) {
   return (
     <div className="rounded-3xl border border-violet-400/30 bg-white/4 p-5 comfort:p-6">
       <div className="space-y-3 comfort:space-y-4">
         <div className="grid gap-3 sm:grid-cols-2 comfort:gap-4">
           <div>
-            <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+            <label htmlFor={`${formId}-name`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
               Name *
             </label>
             <input
+              id={`${formId}-name`}
               type="text"
               value={form.name}
               onChange={(e) => onChange({ ...form, name: e.target.value })}
@@ -249,10 +253,11 @@ function ClientForm({ form, saving, onChange, onSave, onCancel }: ClientFormProp
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+            <label htmlFor={`${formId}-contact`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
               Contact name
             </label>
             <input
+              id={`${formId}-contact`}
               type="text"
               value={form.contactName}
               onChange={(e) => onChange({ ...form, contactName: e.target.value })}

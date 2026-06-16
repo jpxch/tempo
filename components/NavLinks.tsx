@@ -24,7 +24,7 @@ export function NavLinks() {
             key={item.href}
             href={item.href}
             aria-current={isActive ? 'page' : undefined}
-            className={`rounded-full border px-4 py-2 text-sm transition ${
+            className={`inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm transition ${
               isActive
                 ? 'border-violet-500/30 bg-violet-500/20 text-violet-300'
                 : 'border-transparent text-neutral-400 hover:bg-white/10 hover:text-white'

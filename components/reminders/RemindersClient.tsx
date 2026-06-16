@@ -112,10 +112,11 @@ export function RemindersClient({ initialReminders, initialProjects }: Reminders
         <div className="rounded-3xl border border-violet-400/30 bg-white/4 p-5 comfort:p-6">
           <div className="space-y-3 comfort:space-y-4">
             <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+              <label htmlFor="new-reminder-title" className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
                 Reminder *
               </label>
               <input
+                id="new-reminder-title"
                 type="text"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
@@ -125,10 +126,11 @@ export function RemindersClient({ initialReminders, initialProjects }: Reminders
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+              <label htmlFor="new-reminder-project" className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
                 Project *
               </label>
               <select
+                id="new-reminder-project"
                 value={newProjectId}
                 onChange={(e) => setNewProjectId(e.target.value)}
                 className="min-h-11 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-2 text-sm text-neutral-200 outline-none focus:border-violet-300 comfort:min-h-12 comfort:text-base"
@@ -182,6 +184,7 @@ export function RemindersClient({ initialReminders, initialProjects }: Reminders
                 <div className="space-y-3 comfort:space-y-4">
                   <input
                     type="text"
+                    aria-label="Reminder text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleUpdate(reminder.id); }}

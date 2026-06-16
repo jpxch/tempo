@@ -155,6 +155,7 @@ export function ProjectsClient({ initialProjects, initialClients }: ProjectsClie
           form={newForm}
           clients={initialClients}
           saving={saving}
+          formId="project-create"
           onChange={setNewForm}
           onSave={handleCreate}
           onCancel={() => { setCreating(false); setError(null); }}
@@ -181,6 +182,7 @@ export function ProjectsClient({ initialProjects, initialClients }: ProjectsClie
                 form={editForm}
                 clients={initialClients}
                 saving={saving}
+                formId="project-edit"
                 onChange={setEditForm}
                 onSave={() => handleUpdate(project.id)}
                 onCancel={cancelEdit}
@@ -278,21 +280,23 @@ type ProjectFormProps = {
   form: FormData;
   clients: Client[];
   saving: boolean;
+  formId: string;
   onChange: (form: FormData) => void;
   onSave: () => void;
   onCancel: () => void;
 };
 
-function ProjectForm({ form, clients, saving, onChange, onSave, onCancel }: ProjectFormProps) {
+function ProjectForm({ form, clients, saving, formId, onChange, onSave, onCancel }: ProjectFormProps) {
   return (
     <div className="rounded-3xl border border-violet-400/30 bg-white/4 p-5 comfort:p-6">
       <div className="space-y-3 comfort:space-y-4">
         <div className="grid gap-3 sm:grid-cols-2 comfort:gap-4">
           <div>
-            <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+            <label htmlFor={`${formId}-name`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
               Name *
             </label>
             <input
+              id={`${formId}-name`}
               type="text"
               value={form.name}
               onChange={(e) => onChange({ ...form, name: e.target.value })}
@@ -301,10 +305,11 @@ function ProjectForm({ form, clients, saving, onChange, onSave, onCancel }: Proj
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+            <label htmlFor={`${formId}-status`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
               Status *
             </label>
             <select
+              id={`${formId}-status`}
               value={form.status}
               onChange={(e) => onChange({ ...form, status: e.target.value })}
               className="min-h-11 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-2 text-sm text-neutral-200 outline-none focus:border-violet-300 comfort:min-h-12 comfort:text-base"
@@ -317,10 +322,11 @@ function ProjectForm({ form, clients, saving, onChange, onSave, onCancel }: Proj
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+          <label htmlFor={`${formId}-next`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
             Next action
           </label>
           <input
+            id={`${formId}-next`}
             type="text"
             value={form.next}
             onChange={(e) => onChange({ ...form, next: e.target.value })}
@@ -331,10 +337,11 @@ function ProjectForm({ form, clients, saving, onChange, onSave, onCancel }: Proj
 
         <div className="grid gap-3 sm:grid-cols-2 comfort:gap-4">
           <div>
-            <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+            <label htmlFor={`${formId}-client`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
               Client
             </label>
             <select
+              id={`${formId}-client`}
               value={form.clientId}
               onChange={(e) => onChange({ ...form, clientId: e.target.value })}
               className="min-h-11 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-2 text-sm text-neutral-200 outline-none focus:border-violet-300 comfort:min-h-12 comfort:text-base"
@@ -346,11 +353,12 @@ function ProjectForm({ form, clients, saving, onChange, onSave, onCancel }: Proj
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
+            <label htmlFor={`${formId}-color`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
               Color
             </label>
             <div className="flex items-center gap-3">
               <input
+                id={`${formId}-color`}
                 type="color"
                 value={form.color}
                 onChange={(e) => onChange({ ...form, color: e.target.value })}

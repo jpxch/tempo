@@ -17,6 +17,11 @@ export function NotesPanel({ notes, projects }: NotesPanelProps) {
       </p>
 
       <div className="mt-4 space-y-4 comfort:mt-6 comfort:space-y-5">
+        {notes.length === 0 && (
+          <p className="text-sm text-neutral-500 comfort:text-base">
+            No notes yet — use Quick Capture to save your first idea.
+          </p>
+        )}
         {notes.map((note) => {
           const project = getProject(note.projectId);
 
