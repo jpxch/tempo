@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRef, useState } from 'react';
 
 import type { Project } from '@/types/dashboard';
@@ -56,6 +57,23 @@ export function QuickCapture({ projects, saving, onAddReminder, onAddNote }: Qui
       setMessageType('error');
       // text is intentionally preserved so nothing is lost on failure
     }
+  }
+
+  if (projects.length === 0) {
+    return (
+      <div className="rounded-3xl border border-white/10 bg-white/4 p-6 comfort:p-8">
+        <h2 className="text-2xl font-semibold comfort:text-3xl">Catch a Beat</h2>
+        <p className="mt-1 text-sm text-neutral-400 comfort:text-base">
+          Save a reminder or note before it slips.
+        </p>
+        <p className="mt-4 text-sm text-neutral-500 comfort:text-base">
+          You need a project before you can capture anything.{' '}
+          <Link href="/projects" className="text-violet-300 hover:underline">
+            Add your first project →
+          </Link>
+        </p>
+      </div>
+    );
   }
 
   return (

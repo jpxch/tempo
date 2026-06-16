@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ComfortToggle } from '@/components/ComfortToggle';
 import { NavLinks } from '@/components/NavLinks';
 
 type AppShellProps = {
@@ -14,7 +15,10 @@ export function AppShell({ children }: AppShellProps) {
             Tempo
           </Link>
 
-          <NavLinks />
+          <div className="flex flex-wrap items-center gap-2">
+            <NavLinks />
+            <ComfortToggle />
+          </div>
         </nav>
 
         {children}

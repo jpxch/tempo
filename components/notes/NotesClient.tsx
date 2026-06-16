@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -104,7 +105,17 @@ export function NotesClient({ initialNotes, initialProjects }: NotesClientProps)
       )}
 
       {/* New note form */}
-      {creating && (
+      {creating && initialProjects.length === 0 && (
+        <div className="rounded-3xl border border-amber-400/20 bg-amber-400/5 p-5 comfort:p-6">
+          <p className="text-sm text-amber-300 comfort:text-base">
+            You need a project before you can create a note.{' '}
+            <Link href="/projects" className="underline hover:text-amber-200">
+              Add a project →
+            </Link>
+          </p>
+        </div>
+      )}
+      {creating && initialProjects.length > 0 && (
         <div className="rounded-3xl border border-violet-400/30 bg-white/4 p-5 comfort:p-6">
           <div className="space-y-3 comfort:space-y-4">
             <div>

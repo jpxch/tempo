@@ -10,25 +10,10 @@ import { TodayPanel } from '@/components/dashboard/TodayPanel';
 import { WeekPanel } from '@/components/dashboard/WeekPanel';
 
 export function DashboardClient() {
-  const { dashboardData, comfortView, setComfortView, addReminder, addNote, saving } = useTempo();
+  const { dashboardData, addReminder, addNote, saving } = useTempo();
 
   return (
     <section className="space-y-6 comfort:space-y-8">
-      <div className="flex justify-end">
-        <button
-          type="button"
-          aria-pressed={comfortView}
-          onClick={() => setComfortView((current) => !current)}
-          className={`min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition comfort:min-h-12 comfort:px-5 comfort:py-3 comfort:text-base ${
-            comfortView
-              ? 'border-violet-400/40 bg-violet-400/15 text-violet-200'
-              : 'border-white/10 bg-white/4 text-neutral-300 hover:border-white/20 hover:text-white'
-          }`}
-        >
-          Larger text: {comfortView ? 'On' : 'Off'}
-        </button>
-      </div>
-
       <HeroSection />
 
       <section className="grid gap-6 comfort:gap-8 lg:grid-cols-[1.3fr_0.7fr]">

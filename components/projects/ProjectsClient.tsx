@@ -24,22 +24,22 @@ type FormData = {
   clientId: string;
 };
 
-const blankForm = (projects: Project[]): FormData => ({
+const blankForm: FormData = {
   name: '',
   status: 'Active',
   next: '',
-  color: projects.length === 0 ? '#a78bfa' : '#a78bfa',
+  color: '#a78bfa',
   clientId: '',
-});
+};
 
 const STATUS_OPTIONS = ['Active', 'Upcoming', 'Waiting', 'Completed'];
 
 export function ProjectsClient({ initialProjects, initialClients }: ProjectsClientProps) {
   const router = useRouter();
   const [creating, setCreating] = useState(false);
-  const [newForm, setNewForm] = useState<FormData>(blankForm(initialProjects));
+  const [newForm, setNewForm] = useState<FormData>(blankForm);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<FormData>(blankForm(initialProjects));
+  const [editForm, setEditForm] = useState<FormData>(blankForm);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -75,7 +75,7 @@ export function ProjectsClient({ initialProjects, initialClients }: ProjectsClie
         clientId: newForm.clientId || null,
       });
       setCreating(false);
-      setNewForm(blankForm(initialProjects));
+      setNewForm(blankForm);
       router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not create project.');

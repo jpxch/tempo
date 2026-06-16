@@ -47,9 +47,9 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <AppShell>
-          <TempoProvider initialData={initialData}>{children}</TempoProvider>
-        </AppShell>
+        <TempoProvider initialData={initialData}>
+          <AppShell>{children}</AppShell>
+        </TempoProvider>
       </body>
     </html>
   );
