@@ -36,11 +36,14 @@ supabase/migrations/20260615000004_seed_projects.sql
 supabase/migrations/20260615000005_create_clients.sql
 supabase/migrations/20260615000006_seed_clients.sql
 supabase/migrations/20260616000007_add_auth.sql
+supabase/migrations/20260616000008_rls_relationship_checks.sql
 ```
 
 Migration 5 alters the `projects` table (adds `client_id` column).
 Migration 7 adds `user_id` columns and replaces permissive policies with
 per-user ownership policies.
+Migration 8 tightens insert/update policies so related `client_id` and
+`project_id` values must also belong to the current user.
 
 ## Backfilling pre-auth rows
 
@@ -148,7 +151,9 @@ user_id = (select auth.uid())
 
 The `select auth.uid()` subquery is evaluated once per statement (not per row)
 for performance. UPDATE policies carry both `USING` and `WITH CHECK` to prevent
-ownership reassignment. `auth.role()` is not used (deprecated in Supabase).
+ownership reassignment. Project policies also verify linked clients are owned
+by the same user, and reminder/note policies verify linked projects are owned
+by the same user. `auth.role()` is not used (deprecated in Supabase).
 
 ## Intentionally still mocked
 
