@@ -1,5 +1,7 @@
 // Browser-side write functions. Import only from Client Components.
-// Uses the anon key — RLS is the security boundary until milestone 0.5 auth.
+// Runs as the authenticated user via the JWT stored in session cookies.
+// user_id is stamped on every insert by the database default (auth.uid());
+// RLS policies enforce ownership for all reads and writes.
 
 import { createClient } from './client';
 import type { Client, Note, Project, TodayItem } from '@/types/dashboard';

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ComfortToggle } from '@/components/ComfortToggle';
+import { LogoutButton } from '@/components/LogoutButton';
 import { NavLinks } from '@/components/NavLinks';
 
 type AppShellProps = {
@@ -18,6 +19,7 @@ export function AppShell({ children }: AppShellProps) {
           <div className="flex flex-wrap items-center gap-2">
             <NavLinks />
             <ComfortToggle />
+            <LogoutButton />
           </div>
         </nav>
 

@@ -102,20 +102,22 @@ Success criteria:
 
 Estimated time: 1 week
 
-## Version 0.5 — Privacy and Access
+## Version 0.5 — Privacy and Access ✓ Complete
 
 Goal: Add the minimum privacy layer needed for real use.
 
 Features:
 
-- Login
-- User-owned data
-- Protected routes
+- Email + password login via Supabase Auth
+- User-owned data (user_id on all tables, default auth.uid())
+- Protected routes via Next.js 16 Proxy (proxy.ts)
+- Scoped RLS policies replacing permissive pre-auth policies
+- Logout affordance in the nav
 
 Success criteria:
 
-- Ray can safely use real information in the app
-- Access control does not complicate the core experience
+- Ray can safely use real information in the app ✓
+- Access control does not complicate the core experience ✓
 
 Estimated time: 3-5 days
 

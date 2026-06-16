@@ -1,6 +1,6 @@
 # Tempo Database
 
-Status: Active — milestone 0.3.2 complete.
+Status: Active — milestone 0.5 (auth) complete.
 
 ## Environment variables
 
@@ -17,12 +17,16 @@ requires `@supabase/supabase-js` v3, which is not yet released.
 
 A service-role key is never required and must never appear in this codebase.
 
-## Setup (one time)
+## Auth setup (one time)
 
-1. Create a Supabase project at supabase.com.
-2. Copy the Project URL and JWT anon key into `.env.local`.
-3. Open the SQL Editor in the Supabase dashboard.
-4. Run each migration file in order:
+1. In the Supabase dashboard go to **Authentication → Providers** and enable **Email**.
+2. Optionally disable "Confirm email" for single-user local use (Settings → Authentication).
+3. Create your account: go to **Authentication → Users → Add user** and create a user with your email and a strong password.
+4. Copy the Project URL and JWT anon key into `.env.local`.
+
+## Migration setup (one time)
+
+Open the SQL Editor in the Supabase dashboard and run each migration file in order:
 
 ```
 supabase/migrations/20260615000001_create_projects.sql
@@ -31,11 +35,33 @@ supabase/migrations/20260615000003_create_notes.sql
 supabase/migrations/20260615000004_seed_projects.sql
 supabase/migrations/20260615000005_create_clients.sql
 supabase/migrations/20260615000006_seed_clients.sql
+supabase/migrations/20260616000007_add_auth.sql
 ```
 
-Migration 5 alters the existing `projects` table (adds `client_id` column and
-sets a UUID default on `id`). It is safe to run on a database that already has
-projects from migrations 1–4.
+Migration 5 alters the `projects` table (adds `client_id` column).
+Migration 7 adds `user_id` columns and replaces permissive policies with
+per-user ownership policies.
+
+## Backfilling pre-auth rows
+
+Rows created before migration 7 (e.g. seeded data) have `user_id = NULL` and
+are invisible to authenticated queries. To claim them:
+
+1. Find your user UUID: **Authentication → Users** in the Supabase dashboard.
+2. Open the SQL Editor and run (replace `<USER_UUID>` with your actual UUID):
+
+```sql
+update public.clients   set user_id = '<USER_UUID>'::uuid where user_id is null;
+update public.projects  set user_id = '<USER_UUID>'::uuid where user_id is null;
+update public.reminders set user_id = '<USER_UUID>'::uuid where user_id is null;
+update public.notes     set user_id = '<USER_UUID>'::uuid where user_id is null;
+```
+
+> **Do not use `auth.uid()` in the SQL Editor.** The dashboard runs queries
+> without a JWT context, so `auth.uid()` returns NULL and the update silently
+> affects zero rows.
+
+Alternatively, delete the seed rows and recreate your data through the app.
 
 ## Supabase client architecture
 
@@ -50,6 +76,10 @@ Do not import `lib/supabase/server.ts` from Client Components or vice versa.
 
 ## Persisted entities
 
+All tables have a `user_id uuid` column that references `auth.users(id)`.
+RLS enforces that each user can only read and write their own rows.
+New rows have `user_id` set automatically via `default auth.uid()`.
+
 ### clients
 
 | Column | Type | Notes |
@@ -57,6 +87,7 @@ Do not import `lib/supabase/server.ts` from Client Components or vice versa.
 | id | text PK | UUID default from gen_random_uuid() |
 | name | text | |
 | contact_name | text | Nullable — primary contact person |
+| user_id | uuid FK | References auth.users(id) ON DELETE CASCADE |
 | created_at | timestamptz | Default now() |
 
 ### projects
@@ -69,6 +100,7 @@ Do not import `lib/supabase/server.ts` from Client Components or vice versa.
 | next | text | Short next-action label, default '' |
 | color | text | Hex color string |
 | client_id | text FK | Nullable. References clients.id ON DELETE SET NULL |
+| user_id | uuid FK | References auth.users(id) ON DELETE CASCADE |
 | created_at | timestamptz | Default now() |
 
 ### reminders
@@ -81,6 +113,7 @@ Do not import `lib/supabase/server.ts` from Client Components or vice versa.
 | time_label | text | Default: 'Just now' |
 | type | text | Default: 'Reminder' |
 | project_id | text FK | References projects.id (ON DELETE RESTRICT) |
+| user_id | uuid FK | References auth.users(id) ON DELETE CASCADE |
 | created_at | timestamptz | |
 
 ### notes
@@ -91,6 +124,7 @@ Do not import `lib/supabase/server.ts` from Client Components or vice versa.
 | title | text | The note text |
 | preview | text | Same as title for now |
 | project_id | text FK | References projects.id (ON DELETE RESTRICT) |
+| user_id | uuid FK | References auth.users(id) ON DELETE CASCADE |
 | updated_label | text | Default: 'Just now' |
 | created_at | timestamptz | |
 
@@ -98,10 +132,23 @@ Do not import `lib/supabase/server.ts` from Client Components or vice versa.
 
 | Entity | Create | Read | Update | Delete |
 |---|---|---|---|---|
-| clients | ✓ | ✓ | ✓ | ✓ — linked projects become unassigned (ON DELETE SET NULL) |
-| projects | ✓ | ✓ | ✓ | Blocked if reminders or notes exist — delete those first |
-| reminders | ✓ | ✓ | ✓ title | ✓ |
-| notes | ✓ | ✓ | ✓ title | ✓ |
+| clients | ✓ | ✓ (own rows only) | ✓ | ✓ — linked projects become unassigned (ON DELETE SET NULL) |
+| projects | ✓ | ✓ (own rows only) | ✓ | Blocked if reminders or notes exist — delete those first |
+| reminders | ✓ | ✓ (own rows only) | ✓ title | ✓ |
+| notes | ✓ | ✓ (own rows only) | ✓ title | ✓ |
+
+## RLS policy model
+
+Each table has four named policies (select / insert / update / delete), all
+scoped to the `authenticated` role. All policies use:
+
+```sql
+user_id = (select auth.uid())
+```
+
+The `select auth.uid()` subquery is evaluated once per statement (not per row)
+for performance. UPDATE policies carry both `USING` and `WITH CHECK` to prevent
+ownership reassignment. `auth.role()` is not used (deprecated in Supabase).
 
 ## Intentionally still mocked
 
@@ -110,18 +157,18 @@ These entities have no database table yet. They live in `lib/dashboard-data.ts`.
 - **weekItems** — no events or calendar table yet
 - **followUps** — no follow-up table yet
 
-## Security limitations (pre-auth)
+## Security
 
-Row-level security is enabled on all tables, but the current policies allow any
-client with the anon key to read and write all rows. This is intentional for the
-single-user local workflow at milestone 0.3.
+Row-level security is enabled on all tables. Policies restrict every operation
+to the row owner identified by `auth.uid()`. Anonymous and unauthenticated
+requests see no rows and cannot insert.
 
-**Do not store private or sensitive data until milestone 0.5 (auth) ships.** At
-that point, RLS policies will be updated to scope rows to the authenticated user.
+The app itself enforces route-level protection via `proxy.ts` (Next.js 16
+Proxy), which redirects unauthenticated requests to `/login`. RLS is the
+primary data security boundary; the proxy is a convenience layer on top.
 
 ## Not needed yet
 
-- Authentication and user-owned rows
 - Collaboration or multi-user tables
 - Recurrence engine
 - Calendar sync schema
