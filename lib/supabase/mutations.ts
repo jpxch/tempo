@@ -4,7 +4,7 @@
 // RLS policies enforce ownership for all reads and writes.
 
 import { createClient } from './client';
-import type { Client, Note, Project, TodayItem } from '@/types/dashboard';
+import type { Client, FollowUp, Note, Project, TodayItem } from '@/types/dashboard';
 
 // ─── Clients ──────────────────────────────────────────────────────────────────
 
@@ -129,21 +129,26 @@ export async function deleteProject(id: string): Promise<void> {
 
   // Reminders and notes FK to projects with ON DELETE RESTRICT (the default).
   // Pre-check and surface a readable message instead of a raw FK error.
-  const [{ count: rc, error: re }, { count: nc, error: ne }] = await Promise.all([
-    supabase.from('reminders').select('*', { count: 'exact', head: true }).eq('project_id', id),
-    supabase.from('notes').select('*', { count: 'exact', head: true }).eq('project_id', id),
-  ]);
+  const [{ count: rc, error: re }, { count: nc, error: ne }, { count: fc, error: fe }] =
+    await Promise.all([
+      supabase.from('reminders').select('*', { count: 'exact', head: true }).eq('project_id', id),
+      supabase.from('notes').select('*', { count: 'exact', head: true }).eq('project_id', id),
+      supabase.from('follow_ups').select('*', { count: 'exact', head: true }).eq('project_id', id),
+    ]);
 
   if (re) throw new Error(re.message);
   if (ne) throw new Error(ne.message);
+  if (fe) throw new Error(fe.message);
 
   const reminders = rc ?? 0;
   const notes = nc ?? 0;
+  const followUps = fc ?? 0;
 
-  if (reminders > 0 || notes > 0) {
+  if (reminders > 0 || notes > 0 || followUps > 0) {
     const parts: string[] = [];
     if (reminders > 0) parts.push(`${reminders} reminder${reminders !== 1 ? 's' : ''}`);
     if (notes > 0) parts.push(`${notes} note${notes !== 1 ? 's' : ''}`);
+    if (followUps > 0) parts.push(`${followUps} follow-up${followUps !== 1 ? 's' : ''}`);
     throw new Error(
       `Cannot delete: this project has ${parts.join(' and ')}. Delete them first.`,
     );
@@ -255,5 +260,80 @@ export async function updateNote(id: string, input: { title: string }): Promise<
 export async function deleteNote(id: string): Promise<void> {
   const supabase = createClient();
   const { error } = await supabase.from('notes').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+}
+
+// ─── Follow-ups ───────────────────────────────────────────────────────────────
+
+export async function insertFollowUp(input: {
+  person: string;
+  reason: string;
+  dueLabel: string;
+  projectId: string;
+}): Promise<FollowUp> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('follow_ups')
+    .insert({
+      person: input.person,
+      reason: input.reason,
+      due_label: input.dueLabel,
+      project_id: input.projectId,
+    })
+    .select('*')
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return {
+    id: data.id,
+    person: data.person,
+    reason: data.reason,
+    dueLabel: data.due_label,
+    projectId: data.project_id,
+    status: data.status,
+  };
+}
+
+export async function updateFollowUp(
+  id: string,
+  input: {
+    person?: string;
+    reason?: string;
+    dueLabel?: string;
+    projectId?: string;
+    status?: string;
+  },
+): Promise<FollowUp> {
+  const supabase = createClient();
+  const patch: Record<string, unknown> = {};
+  if (input.person !== undefined) patch.person = input.person;
+  if (input.reason !== undefined) patch.reason = input.reason;
+  if (input.dueLabel !== undefined) patch.due_label = input.dueLabel;
+  if (input.projectId !== undefined) patch.project_id = input.projectId;
+  if (input.status !== undefined) patch.status = input.status;
+
+  const { data, error } = await supabase
+    .from('follow_ups')
+    .update(patch)
+    .eq('id', id)
+    .select('*')
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return {
+    id: data.id,
+    person: data.person,
+    reason: data.reason,
+    dueLabel: data.due_label,
+    projectId: data.project_id,
+    status: data.status,
+  };
+}
+
+export async function deleteFollowUp(id: string): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase.from('follow_ups').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }

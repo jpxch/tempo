@@ -87,7 +87,7 @@ export function ProjectDetailView({ project, data }: ProjectDetailViewProps) {
         >
           {followUps.map((followUp) => (
             <article
-              key={`${followUp.projectId}-${followUp.person}`}
+              key={followUp.id}
               className="rounded-2xl border border-white/10 bg-neutral-900/80 p-4 comfort:p-6"
               style={{ borderLeft: `4px solid ${project.color}` }}
             >

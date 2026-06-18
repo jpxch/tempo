@@ -1,14 +1,15 @@
 import { AppShell } from '@/components/AppShell';
 import { TempoProvider } from '@/components/TempoProvider';
-import { fetchProjects, fetchReminders, fetchNotes } from '@/lib/supabase/queries';
-import { mockWeekItems, mockFollowUps } from '@/lib/dashboard-data';
+import { fetchProjects, fetchReminders, fetchNotes, fetchFollowUps } from '@/lib/supabase/queries';
+import { mockWeekItems } from '@/lib/dashboard-data';
 import type { DashboardData } from '@/types/dashboard';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const [projects, todayItems, notes] = await Promise.all([
+  const [projects, todayItems, notes, allFollowUps] = await Promise.all([
     fetchProjects(),
     fetchReminders(),
     fetchNotes(),
+    fetchFollowUps(),
   ]);
 
   const initialData: DashboardData = {
@@ -16,7 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     todayItems,
     notes,
     weekItems: mockWeekItems,
-    followUps: mockFollowUps,
+    followUps: allFollowUps.filter((f) => f.status === 'open'),
   };
 
   return (

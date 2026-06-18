@@ -29,10 +29,12 @@ export type WeekItem = {
 };
 
 export type FollowUp = {
+  id: string;
   person: string;
   reason: string;
   dueLabel: string;
   projectId: string;
+  status: string; // 'open' | 'done'
 };
 
 export type Note = {
