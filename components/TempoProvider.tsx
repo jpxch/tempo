@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from 'react';
 
-import { insertReminder, insertNote } from '@/lib/supabase/mutations';
+import { deleteReminder, insertReminder, insertNote } from '@/lib/supabase/mutations';
 import type { DashboardData } from '@/types/dashboard';
 
 type TempoContextValue = {
@@ -11,6 +11,7 @@ type TempoContextValue = {
   saving: boolean;
   addReminder: (input: { title: string; projectId: string }) => Promise<void>;
   addNote: (input: { text: string; projectId: string }) => Promise<void>;
+  completeReminder: (id: string) => Promise<void>;
   setComfortView: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -71,9 +72,31 @@ export function TempoProvider({ children, initialData }: TempoProviderProps) {
     }
   }
 
+  async function completeReminder(id: string) {
+    if (saving) return;
+    setSaving(true);
+    try {
+      await deleteReminder(id);
+      setDashboardData((current) => ({
+        ...current,
+        todayItems: current.todayItems.filter((item) => item.id !== id),
+      }));
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <TempoContext.Provider
-      value={{ dashboardData, comfortView, saving, addReminder, addNote, setComfortView }}
+      value={{
+        dashboardData,
+        comfortView,
+        saving,
+        addReminder,
+        addNote,
+        completeReminder,
+        setComfortView,
+      }}
     >
       <div data-comfort-view={comfortView}>{children}</div>
     </TempoContext.Provider>

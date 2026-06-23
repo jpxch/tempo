@@ -10,14 +10,19 @@ import { TodayPanel } from '@/components/dashboard/TodayPanel';
 import { WeekPanel } from '@/components/dashboard/WeekPanel';
 
 export function DashboardClient() {
-  const { dashboardData, addReminder, addNote, saving } = useTempo();
+  const { dashboardData, addReminder, addNote, completeReminder, saving } = useTempo();
 
   return (
     <section className="space-y-6 comfort:space-y-8">
       <HeroSection />
 
       <section className="grid gap-6 comfort:gap-8 lg:grid-cols-[1.3fr_0.7fr]">
-        <TodayPanel items={dashboardData.todayItems} projects={dashboardData.projects} />
+        <TodayPanel
+          items={dashboardData.todayItems}
+          projects={dashboardData.projects}
+          saving={saving}
+          onMarkDone={completeReminder}
+        />
         <FollowUpsPanel
           followUps={dashboardData.followUps}
           projects={dashboardData.projects}
