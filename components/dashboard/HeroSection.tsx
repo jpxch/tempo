@@ -79,7 +79,18 @@ function computeGreeting(): Pick<GreetingInfo, 'greeting' | 'city' | 'phrase'> {
   return { greeting, city, phrase };
 }
 
-export function HeroSection({ displayName }: { displayName: string }) {
+type HeroSectionProps = {
+  displayName: string;
+  priorityCount: number;
+};
+
+function formatPriorityText(priorityCount: number): string {
+  if (priorityCount === 0) return 'Open space today';
+  if (priorityCount === 1) return '1 priority today';
+  return `${priorityCount} priorities today`;
+}
+
+export function HeroSection({ displayName, priorityCount }: HeroSectionProps) {
   const [info, setInfo] = useState<GreetingInfo>({
     greeting: 'Good morning',
     city: null,
@@ -95,6 +106,7 @@ export function HeroSection({ displayName }: { displayName: string }) {
   }, []);
 
   const { greeting, city, phrase } = info;
+  const priorityText = formatPriorityText(priorityCount);
 
   return (
     <header className="flex flex-col justify-between gap-4 rounded-3xl border border-white/10 bg-white/3 p-6 shadow-2xl comfort:gap-6 comfort:p-8 md:flex-row md:items-center">
@@ -116,7 +128,7 @@ export function HeroSection({ displayName }: { displayName: string }) {
 
       <div className="rounded-2xl border border-violet-400/30 bg-violet-400/10 px-5 py-4 comfort:p-6">
         <p className="text-sm text-violet-200 comfort:text-base">Focus Brief</p>
-        <p className="mt-1 text-2xl font-semibold comfort:text-3xl">3 priorities today</p>
+        <p className="mt-1 text-2xl font-semibold comfort:text-3xl">{priorityText}</p>
       </div>
     </header>
   );

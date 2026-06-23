@@ -11,10 +11,11 @@ import { WeekPanel } from '@/components/dashboard/WeekPanel';
 
 export function DashboardClient() {
   const { dashboardData, displayName, addReminder, addNote, completeReminder, saving } = useTempo();
+  const priorityCount = dashboardData.todayItems.length;
 
   return (
     <section className="space-y-6 comfort:space-y-8">
-      <HeroSection displayName={displayName} />
+      <HeroSection displayName={displayName} priorityCount={priorityCount} />
 
       <section className="grid gap-6 comfort:gap-8 lg:grid-cols-[1.3fr_0.7fr]">
         <TodayPanel
