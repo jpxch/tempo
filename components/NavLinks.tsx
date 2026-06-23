@@ -9,6 +9,7 @@ const navItems = [
   { label: 'Clients', href: '/clients' },
   { label: 'Notes', href: '/notes' },
   { label: 'Reminders', href: '/reminders' },
+  { label: 'Follow-ups', href: '/follow-ups' },
 ];
 
 export function NavLinks() {

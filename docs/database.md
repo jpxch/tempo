@@ -1,6 +1,6 @@
 # Tempo Database
 
-Status: Active — milestone 0.5 (auth) complete.
+Status: Active — milestone 0.5 (auth) complete. follow_ups table added (migration 009).
 
 ## Environment variables
 
@@ -37,6 +37,7 @@ supabase/migrations/20260615000005_create_clients.sql
 supabase/migrations/20260615000006_seed_clients.sql
 supabase/migrations/20260616000007_add_auth.sql
 supabase/migrations/20260616000008_rls_relationship_checks.sql
+supabase/migrations/20260623000009_create_follow_ups.sql
 ```
 
 Migration 5 alters the `projects` table (adds `client_id` column).
@@ -44,6 +45,8 @@ Migration 7 adds `user_id` columns and replaces permissive policies with
 per-user ownership policies.
 Migration 8 tightens insert/update policies so related `client_id` and
 `project_id` values must also belong to the current user.
+Migration 9 creates the `follow_ups` table with full RLS and relationship
+ownership checks consistent with migration 8.
 
 ## Backfilling pre-auth rows
 
@@ -131,14 +134,27 @@ New rows have `user_id` set automatically via `default auth.uid()`.
 | updated_label | text | Default: 'Just now' |
 | created_at | timestamptz | |
 
+### follow_ups
+
+| Column | Type | Notes |
+|---|---|---|
+| id | text PK | UUID default from gen_random_uuid()::text |
+| person | text | Name of the person to follow up with |
+| reason | text | What you are waiting on — default '' |
+| due_label | text | Loose time label (Today / Tomorrow / This Week / Soon) — default 'Soon' |
+| project_id | text FK | References projects.id (ON DELETE RESTRICT) |
+| user_id | uuid FK NOT NULL | References auth.users(id) ON DELETE CASCADE |
+| created_at | timestamptz | Default now() |
+
 ## CRUD behavior
 
 | Entity | Create | Read | Update | Delete |
 |---|---|---|---|---|
 | clients | ✓ | ✓ (own rows only) | ✓ | ✓ — linked projects become unassigned (ON DELETE SET NULL) |
-| projects | ✓ | ✓ (own rows only) | ✓ | Blocked if reminders or notes exist — delete those first |
+| projects | ✓ | ✓ (own rows only) | ✓ | Blocked if reminders, notes, or follow-ups exist — delete those first |
 | reminders | ✓ | ✓ (own rows only) | ✓ title | ✓ |
 | notes | ✓ | ✓ (own rows only) | ✓ title | ✓ |
+| follow_ups | ✓ | ✓ (own rows only) | ✓ person / reason / due_label | ✓ |
 
 ## RLS policy model
 
@@ -152,15 +168,14 @@ user_id = (select auth.uid())
 The `select auth.uid()` subquery is evaluated once per statement (not per row)
 for performance. UPDATE policies carry both `USING` and `WITH CHECK` to prevent
 ownership reassignment. Project policies also verify linked clients are owned
-by the same user, and reminder/note policies verify linked projects are owned
-by the same user. `auth.role()` is not used (deprecated in Supabase).
+by the same user, and reminder/note/follow-up policies verify linked projects
+are owned by the same user. `auth.role()` is not used (deprecated in Supabase).
 
 ## Intentionally still mocked
 
 These entities have no database table yet. They live in `lib/dashboard-data.ts`.
 
 - **weekItems** — no events or calendar table yet
-- **followUps** — no follow-up table yet
 
 ## Security
 

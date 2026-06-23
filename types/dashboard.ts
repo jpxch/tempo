@@ -29,6 +29,7 @@ export type WeekItem = {
 };
 
 export type FollowUp = {
+  id: string;
   person: string;
   reason: string;
   dueLabel: string;
