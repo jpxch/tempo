@@ -64,6 +64,7 @@ export type Database = {
           time_label: string;
           type: string;
           project_id: string;
+          completed_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -73,6 +74,7 @@ export type Database = {
           time_label?: string;
           type?: string;
           project_id: string;
+          completed_at?: string | null;
           created_at?: string;
         };
         Update: {
@@ -82,6 +84,7 @@ export type Database = {
           time_label?: string;
           type?: string;
           project_id?: string;
+          completed_at?: string | null;
           created_at?: string;
         };
         Relationships: [];

@@ -221,6 +221,16 @@ export async function deleteReminder(id: string): Promise<void> {
   if (error) throw new Error(error.message);
 }
 
+export async function completeReminder(id: string): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('reminders')
+    .update({ completed_at: new Date().toISOString() })
+    .eq('id', id);
+
+  if (error) throw new Error(error.message);
+}
+
 // ─── Notes ────────────────────────────────────────────────────────────────────
 
 export async function insertNote(input: {

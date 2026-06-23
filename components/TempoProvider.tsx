@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from 'react';
 
-import { deleteReminder, insertReminder, insertNote } from '@/lib/supabase/mutations';
+import { completeReminder as completeReminderMutation, insertReminder, insertNote } from '@/lib/supabase/mutations';
 import type { DashboardData } from '@/types/dashboard';
 
 type TempoContextValue = {
@@ -76,7 +76,7 @@ export function TempoProvider({ children, initialData }: TempoProviderProps) {
     if (saving) return;
     setSaving(true);
     try {
-      await deleteReminder(id);
+      await completeReminderMutation(id);
       setDashboardData((current) => ({
         ...current,
         todayItems: current.todayItems.filter((item) => item.id !== id),

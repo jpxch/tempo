@@ -44,6 +44,7 @@ export async function fetchReminders(): Promise<TodayItem[]> {
   const { data, error } = await supabase
     .from('reminders')
     .select('*')
+    .is('completed_at', null)
     .order('created_at', { ascending: false });
 
   if (error) throw new Error(`Failed to fetch reminders: ${error.message}`);

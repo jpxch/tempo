@@ -1,6 +1,6 @@
 # Tempo Database
 
-Status: Active — milestone 0.5 (auth) complete. All dashboard entities are now persisted in Supabase (migrations 001–010). No dashboard data remains mocked.
+Status: Active — milestone 0.5 (auth) complete. All dashboard entities are now persisted in Supabase (migrations 001–011). No dashboard data remains mocked.
 
 ## Environment variables
 
@@ -39,6 +39,7 @@ supabase/migrations/20260616000007_add_auth.sql
 supabase/migrations/20260616000008_rls_relationship_checks.sql
 supabase/migrations/20260623000009_create_follow_ups.sql
 supabase/migrations/20260623000010_create_week_items.sql
+supabase/migrations/20260623000011_add_reminder_completion.sql
 ```
 
 Migration 5 alters the `projects` table (adds `client_id` column).
@@ -51,6 +52,8 @@ ownership checks consistent with migration 8.
 Migration 10 creates the `week_items` table with the same RLS pattern,
 completing the dashboard data foundation. `lib/dashboard-data.ts` has been
 deleted; no dashboard entities remain mocked.
+Migration 11 adds `completed_at` to reminders so marking a reminder done hides
+it from the dashboard without deleting the row.
 
 ## Backfilling pre-auth rows
 
@@ -124,6 +127,7 @@ New rows have `user_id` set automatically via `default auth.uid()`.
 | type | text | Default: 'Reminder' |
 | project_id | text FK | References projects.id (ON DELETE RESTRICT) |
 | user_id | uuid FK | References auth.users(id) ON DELETE CASCADE |
+| completed_at | timestamptz | Nullable — set when marked done |
 | created_at | timestamptz | |
 
 ### notes
@@ -167,7 +171,7 @@ New rows have `user_id` set automatically via `default auth.uid()`.
 |---|---|---|---|---|
 | clients | ✓ | ✓ (own rows only) | ✓ | ✓ — linked projects become unassigned (ON DELETE SET NULL) |
 | projects | ✓ | ✓ (own rows only) | ✓ | Blocked if reminders, notes, follow-ups, or weekly items exist — delete those first |
-| reminders | ✓ | ✓ (own rows only) | ✓ title | ✓ |
+| reminders | ✓ | ✓ open rows only on dashboard/reminders views | ✓ title / completed_at | ✓ |
 | notes | ✓ | ✓ (own rows only) | ✓ title | ✓ |
 | follow_ups | ✓ | ✓ (own rows only) | ✓ person / reason / due_label | ✓ |
 | week_items | ✓ | ✓ (own rows only) | ✓ title / due_label | ✓ |
