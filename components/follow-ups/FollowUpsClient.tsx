@@ -33,7 +33,9 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleCreate() {
+  async function handleCreate(event?: React.FormEvent<HTMLFormElement>) {
+    event?.preventDefault();
+
     const person = newPerson.trim();
     if (!person) { setError('Name is required.'); return; }
     if (!newProjectId) { setError('Choose a project.'); return; }
@@ -58,7 +60,9 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
     }
   }
 
-  async function handleUpdate(id: string) {
+  async function handleUpdate(id: string, event?: React.FormEvent<HTMLFormElement>) {
+    event?.preventDefault();
+
     const person = editPerson.trim();
     if (!person) { setError('Name is required.'); return; }
     setSaving(true);
@@ -134,7 +138,7 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
       )}
       {creating && initialProjects.length > 0 && (
         <div className="rounded-3xl border border-violet-400/30 bg-white/4 p-5 comfort:p-6">
-          <div className="space-y-3 comfort:space-y-4">
+          <form className="space-y-3 comfort:space-y-4" onSubmit={handleCreate}>
             <div>
               <label htmlFor="new-followup-person" className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
                 Person *
@@ -144,7 +148,6 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
                 type="text"
                 value={newPerson}
                 onChange={(e) => setNewPerson(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleCreate(); }}
                 placeholder="Who do you need to follow up with?"
                 className="min-h-11 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-2 text-sm text-neutral-200 outline-none focus:border-violet-300 comfort:min-h-12 comfort:text-base"
               />
@@ -196,9 +199,8 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
             </div>
             <div className="flex gap-3 pt-1">
               <button
-                type="button"
+                type="submit"
                 disabled={saving}
-                onClick={handleCreate}
                 className="min-h-11 rounded-2xl bg-violet-400 px-5 py-2 text-sm font-medium text-neutral-950 transition hover:bg-violet-300 disabled:opacity-60 comfort:min-h-12 comfort:text-base"
               >
                 {saving ? 'Saving…' : 'Add follow-up'}
@@ -211,7 +213,7 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
                 Cancel
               </button>
             </div>
-          </div>
+          </form>
         </div>
       )}
 
@@ -235,7 +237,10 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
               style={{ borderLeft: `4px solid ${project?.color ?? '#737373'}` }}
             >
               {editingId === followUp.id ? (
-                <div className="space-y-3 comfort:space-y-4">
+                <form
+                  className="space-y-3 comfort:space-y-4"
+                  onSubmit={(event) => handleUpdate(followUp.id, event)}
+                >
                   <div>
                     <label htmlFor={`edit-person-${followUp.id}`} className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500 comfort:text-sm">
                       Person *
@@ -245,7 +250,6 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
                       type="text"
                       value={editPerson}
                       onChange={(e) => setEditPerson(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === 'Enter') handleUpdate(followUp.id); }}
                       className="min-h-11 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-2 text-sm text-neutral-200 outline-none focus:border-violet-300 comfort:min-h-12 comfort:text-base"
                     />
                   </div>
@@ -278,9 +282,8 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
                   </div>
                   <div className="flex gap-3">
                     <button
-                      type="button"
+                      type="submit"
                       disabled={saving}
-                      onClick={() => handleUpdate(followUp.id)}
                       className="rounded-xl bg-violet-400 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-violet-300 disabled:opacity-60 comfort:text-base"
                     >
                       {saving ? 'Saving…' : 'Save'}
@@ -293,7 +296,7 @@ export function FollowUpsClient({ initialFollowUps, initialProjects }: FollowUps
                       Cancel
                     </button>
                   </div>
-                </div>
+                </form>
               ) : pendingDeleteId === followUp.id ? (
                 <div className="space-y-3">
                   <p className="text-sm text-neutral-300 comfort:text-base">

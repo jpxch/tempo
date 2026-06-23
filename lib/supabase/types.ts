@@ -113,6 +113,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      follow_ups: {
+        Row: {
+          id: string;
+          person: string;
+          reason: string;
+          due_label: string;
+          project_id: string;
+          user_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          person: string;
+          reason?: string;
+          due_label?: string;
+          project_id: string;
+          user_id?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          person?: string;
+          reason?: string;
+          due_label?: string;
+          project_id?: string;
+          user_id?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
