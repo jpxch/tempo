@@ -1,7 +1,15 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ComfortToggle } from '@/components/ComfortToggle';
-import { LogoutButton } from '@/components/LogoutButton';
 import { NavLinks } from '@/components/NavLinks';
+import { createClient } from '@/lib/supabase/server';
+
+async function logout() {
+  'use server';
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect('/login');
+}
 
 type AppShellProps = {
   children: React.ReactNode;
@@ -19,7 +27,14 @@ export function AppShell({ children }: AppShellProps) {
           <div className="flex flex-wrap items-center gap-2">
             <NavLinks />
             <ComfortToggle />
-            <LogoutButton />
+            <form action={logout}>
+              <button
+                type="submit"
+                className="inline-flex min-h-11 items-center rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-neutral-400 transition hover:border-white/20 hover:text-white"
+              >
+                Sign out
+              </button>
+            </form>
           </div>
         </nav>
 
