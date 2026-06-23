@@ -24,7 +24,7 @@ export function WeekPanel({ items, projects }: WeekPanelProps) {
         )}
         {items.map((item) => (
           <div
-            key={`${item.projectId}-${item.title}`}
+            key={item.id}
             className="rounded-2xl bg-neutral-900/80 p-4 comfort:p-6"
             style={{
               borderLeft: `4px solid ${getProject(item.projectId)?.color ?? '#737373'}`,

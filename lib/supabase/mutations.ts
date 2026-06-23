@@ -4,7 +4,7 @@
 // RLS policies enforce ownership for all reads and writes.
 
 import { createClient } from './client';
-import type { Client, FollowUp, Note, Project, TodayItem } from '@/types/dashboard';
+import type { Client, FollowUp, Note, Project, TodayItem, WeekItem } from '@/types/dashboard';
 
 // ─── Clients ──────────────────────────────────────────────────────────────────
 
@@ -127,31 +127,36 @@ export async function updateProject(
 export async function deleteProject(id: string): Promise<void> {
   const supabase = createClient();
 
-  // Reminders, notes, and follow_ups FK to projects with ON DELETE RESTRICT.
+  // Reminders, notes, follow_ups, and week_items FK to projects with ON DELETE RESTRICT.
   // Pre-check and surface a readable message instead of a raw FK error.
   const [
     { count: rc, error: re },
     { count: nc, error: ne },
     { count: fc, error: fe },
+    { count: wc, error: we },
   ] = await Promise.all([
     supabase.from('reminders').select('*', { count: 'exact', head: true }).eq('project_id', id),
     supabase.from('notes').select('*', { count: 'exact', head: true }).eq('project_id', id),
     supabase.from('follow_ups').select('*', { count: 'exact', head: true }).eq('project_id', id),
+    supabase.from('week_items').select('*', { count: 'exact', head: true }).eq('project_id', id),
   ]);
 
   if (re) throw new Error(re.message);
   if (ne) throw new Error(ne.message);
   if (fe) throw new Error(fe.message);
+  if (we) throw new Error(we.message);
 
   const reminders = rc ?? 0;
   const notes = nc ?? 0;
   const followUps = fc ?? 0;
+  const weekItems = wc ?? 0;
 
-  if (reminders > 0 || notes > 0 || followUps > 0) {
+  if (reminders > 0 || notes > 0 || followUps > 0 || weekItems > 0) {
     const parts: string[] = [];
     if (reminders > 0) parts.push(`${reminders} reminder${reminders !== 1 ? 's' : ''}`);
     if (notes > 0) parts.push(`${notes} note${notes !== 1 ? 's' : ''}`);
     if (followUps > 0) parts.push(`${followUps} follow-up${followUps !== 1 ? 's' : ''}`);
+    if (weekItems > 0) parts.push(`${weekItems} weekly item${weekItems !== 1 ? 's' : ''}`);
     throw new Error(
       `Cannot delete: this project has ${parts.join(' and ')}. Delete them first.`,
     );
@@ -328,5 +333,65 @@ export async function updateFollowUp(
 export async function deleteFollowUp(id: string): Promise<void> {
   const supabase = createClient();
   const { error } = await supabase.from('follow_ups').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+}
+
+// ─── Week Items ───────────────────────────────────────────────────────────────
+
+export async function insertWeekItem(input: {
+  title: string;
+  dueLabel: string;
+  projectId: string;
+}): Promise<WeekItem> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('week_items')
+    .insert({
+      title: input.title,
+      due_label: input.dueLabel,
+      project_id: input.projectId,
+    })
+    .select('*')
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return {
+    id: data.id,
+    title: data.title,
+    dueLabel: data.due_label,
+    projectId: data.project_id,
+  };
+}
+
+export async function updateWeekItem(
+  id: string,
+  input: { title?: string; dueLabel?: string },
+): Promise<WeekItem> {
+  const supabase = createClient();
+  const patch: Record<string, unknown> = {};
+  if (input.title !== undefined) patch.title = input.title;
+  if (input.dueLabel !== undefined) patch.due_label = input.dueLabel;
+
+  const { data, error } = await supabase
+    .from('week_items')
+    .update(patch)
+    .eq('id', id)
+    .select('*')
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  return {
+    id: data.id,
+    title: data.title,
+    dueLabel: data.due_label,
+    projectId: data.project_id,
+  };
+}
+
+export async function deleteWeekItem(id: string): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase.from('week_items').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }

@@ -143,6 +143,33 @@ export type Database = {
         };
         Relationships: [];
       };
+      week_items: {
+        Row: {
+          id: string;
+          title: string;
+          due_label: string;
+          project_id: string;
+          user_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          due_label?: string;
+          project_id: string;
+          user_id?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          due_label?: string;
+          project_id?: string;
+          user_id?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;

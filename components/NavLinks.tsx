@@ -10,6 +10,7 @@ const navItems = [
   { label: 'Notes', href: '/notes' },
   { label: 'Reminders', href: '/reminders' },
   { label: 'Follow-ups', href: '/follow-ups' },
+  { label: 'Weekly', href: '/weekly' },
 ];
 
 export function NavLinks() {

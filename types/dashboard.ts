@@ -23,6 +23,7 @@ export type TodayItem = {
 };
 
 export type WeekItem = {
+  id: string;
   title: string;
   dueLabel: string;
   projectId: string;
