@@ -23,11 +23,12 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
+  const name = String(formData.get('name') ?? '').trim();
   const email = String(formData.get('email') ?? '').trim();
   const password = String(formData.get('password') ?? '');
   const confirmPassword = String(formData.get('confirm-password') ?? '');
 
-  if (!email || !password || !confirmPassword) {
+  if (!name || !email || !password || !confirmPassword) {
     redirect('/login?mode=signup&error=missing');
   }
 
@@ -40,7 +41,11 @@ export async function signup(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { name } },
+  });
 
   if (error) {
     redirect('/login?mode=signup&error=signup');

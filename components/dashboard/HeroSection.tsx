@@ -79,7 +79,7 @@ function computeGreeting(): Pick<GreetingInfo, 'greeting' | 'city' | 'phrase'> {
   return { greeting, city, phrase };
 }
 
-export function HeroSection() {
+export function HeroSection({ displayName }: { displayName: string }) {
   const [info, setInfo] = useState<GreetingInfo>({
     greeting: 'Good morning',
     city: null,
@@ -106,7 +106,7 @@ export function HeroSection() {
         <h1 className="mt-3 text-4xl font-semibold tracking-tight comfort:text-5xl md:text-6xl comfort:md:text-7xl">
           {greeting}
           {city && <span className="text-neutral-400"> from {city}</span>}
-          {', '}Ray.
+          {', '}{displayName}.
         </h1>
 
         <p className="mt-3 max-w-2xl text-neutral-400 comfort:text-lg comfort:leading-relaxed">

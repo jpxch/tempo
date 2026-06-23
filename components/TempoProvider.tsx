@@ -7,6 +7,7 @@ import type { DashboardData } from '@/types/dashboard';
 
 type TempoContextValue = {
   dashboardData: DashboardData;
+  displayName: string;
   comfortView: boolean;
   saving: boolean;
   addReminder: (input: { title: string; projectId: string }) => Promise<void>;
@@ -28,9 +29,10 @@ export function useTempo(): TempoContextValue {
 type TempoProviderProps = {
   children: React.ReactNode;
   initialData: DashboardData;
+  displayName: string;
 };
 
-export function TempoProvider({ children, initialData }: TempoProviderProps) {
+export function TempoProvider({ children, initialData, displayName }: TempoProviderProps) {
   const [dashboardData, setDashboardData] = useState<DashboardData>(initialData);
   const [prevInitialData, setPrevInitialData] = useState<DashboardData>(initialData);
   const [comfortView, setComfortView] = useState(true);
@@ -90,6 +92,7 @@ export function TempoProvider({ children, initialData }: TempoProviderProps) {
     <TempoContext.Provider
       value={{
         dashboardData,
+        displayName,
         comfortView,
         saving,
         addReminder,

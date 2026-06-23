@@ -1,5 +1,6 @@
 import { AppShell } from '@/components/AppShell';
 import { TempoProvider } from '@/components/TempoProvider';
+import { createClient } from '@/lib/supabase/server';
 import {
   fetchProjects,
   fetchReminders,
@@ -10,6 +11,12 @@ import {
 import type { DashboardData } from '@/types/dashboard';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const displayName = (user?.user_metadata?.name as string | undefined) ?? 'Ray';
+
   const [projects, todayItems, notes, followUps, weekItems] = await Promise.all([
     fetchProjects(),
     fetchReminders(),
@@ -27,7 +34,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    <TempoProvider initialData={initialData}>
+    <TempoProvider initialData={initialData} displayName={displayName}>
       <AppShell>{children}</AppShell>
     </TempoProvider>
   );

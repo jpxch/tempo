@@ -4,7 +4,7 @@ import { login, signup } from './actions';
 
 const ERROR_MESSAGES: Record<string, string> = {
   invalid: 'Incorrect email or password.',
-  missing: 'Please enter your email and password.',
+  missing: 'Please fill in all required fields.',
   'password-short': 'Use a password with at least 8 characters.',
   'password-match': 'Passwords do not match.',
   signup: 'Could not create that account. Try again or sign in.',
@@ -58,6 +58,26 @@ export default async function LoginPage({
         )}
 
         <form action={isSignup ? signup : login} className="space-y-4">
+          {isSignup && (
+            <div>
+              <label
+                htmlFor="name"
+                className="mb-1 block text-xs font-medium uppercase tracking-wider text-neutral-500"
+              >
+                Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                required
+                className="min-h-11 w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-2 text-sm text-neutral-200 outline-none placeholder:text-neutral-600 focus:border-violet-300"
+                placeholder="Your name"
+              />
+            </div>
+          )}
+
           <div>
             <label
               htmlFor="email"
