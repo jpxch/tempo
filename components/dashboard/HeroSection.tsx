@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const PHRASES = [
   'The body remembers what the mind forgets.',
@@ -59,7 +59,6 @@ type GreetingInfo = {
   greeting: string;
   city: string | null;
   phrase: string;
-  ready: boolean;
 };
 
 function computeGreeting(): Pick<GreetingInfo, 'greeting' | 'city' | 'phrase'> {
@@ -85,14 +84,15 @@ export function HeroSection() {
     greeting: 'Good morning',
     city: null,
     phrase: PHRASES[0],
-    ready: false,
   });
 
-  // "Adjusting state during render" — runs once on first client render.
-  // typeof window prevents this running during SSR.
-  if (!info.ready && typeof window !== 'undefined') {
-    setInfo({ ...computeGreeting(), ready: true });
-  }
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setInfo(computeGreeting());
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const { greeting, city, phrase } = info;
 
@@ -103,18 +103,13 @@ export function HeroSection() {
           Tempo
         </p>
 
-        {/* suppressHydrationWarning: greeting text intentionally differs between
-            server (UTC fallback) and client (user's local timezone + random phrase). */}
-        <h1
-          suppressHydrationWarning
-          className="mt-3 text-4xl font-semibold tracking-tight comfort:text-5xl md:text-6xl comfort:md:text-7xl"
-        >
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight comfort:text-5xl md:text-6xl comfort:md:text-7xl">
           {greeting}
           {city && <span className="text-neutral-400"> from {city}</span>}
           {', '}Ray.
         </h1>
 
-        <p suppressHydrationWarning className="mt-3 max-w-2xl text-neutral-400 comfort:text-lg comfort:leading-relaxed">
+        <p className="mt-3 max-w-2xl text-neutral-400 comfort:text-lg comfort:leading-relaxed">
           {phrase}
         </p>
       </div>
